@@ -33,6 +33,9 @@ namespace WpfApp4.ViewModels
         public IconChar Icon { get => _icon; set { _icon = value; OnPropertyChanged(nameof(Icon)); } }
         public ICommand ShowQRScannerView { get; }
         public ICommand ShowDataView { get; }  
+        public ICommand ShowReportView { get; }
+        public ICommand ShowSettingView { get; }    
+        public ICommand ShowSupportView { get; }    
         public MainViewModel()
         {
             userRepository = new UserRepository();
@@ -40,9 +43,33 @@ namespace WpfApp4.ViewModels
             //Initialize commands
             ShowQRScannerView = new ViewModelCommand(ExecuteShowQRScannerViewCommand);
             ShowDataView = new ViewModelCommand(ExecuteShowDataViewCommand);
+            ShowReportView = new ViewModelCommand(ExecuteShowReportViewCommand);
+            ShowSettingView = new ViewModelCommand(ExecuteShowSettingViewCommand);
+            ShowSupportView = new ViewModelCommand(ExecuteShowSupportViewCommand);
             //Default view
             ExecuteShowQRScannerViewCommand(null);
             LoadCurrentUserData();
+        }
+
+        private void ExecuteShowSupportViewCommand(object obj)
+        {
+            CurrentChildView = new SupportViewModel();
+            Caption = "Support";
+            Icon = IconChar.Headset;
+        }
+
+        private void ExecuteShowSettingViewCommand(object obj)
+        {
+            CurrentChildView = new SettingViewModel();
+            Caption = "Setting";
+            Icon = IconChar.Gear;
+        }
+
+        private void ExecuteShowReportViewCommand(object obj)
+        {
+            CurrentChildView = new ReportViewModel();
+            Caption = "Report";
+            Icon = IconChar.PieChart;
         }
 
         private void ExecuteShowDataViewCommand(object obj)

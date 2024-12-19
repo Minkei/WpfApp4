@@ -27,6 +27,18 @@
         <DataTemplate DataType="{x:Type viewModel:DataViewModel}">
             <local:DataView/>
         </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewModel:ReportViewModel}">
+            <local:ReportView/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewModel:SettingViewModel}">
+            <local:SettingView/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewModel:SupportViewModel}">
+            <local:SupportView/>
+        </DataTemplate>
     </Window.Resources>
 
     <!--<Window.Resources>
@@ -90,7 +102,8 @@
                         </RadioButton>
 
                         <RadioButton Style="{StaticResource menuButton}"
-                                     Tag="{StaticResource color3}">
+                                     Tag="{StaticResource color3}"
+                                     Command="{Binding ShowReportView}">
                             <StackPanel Orientation="Horizontal">
                                 <fa:IconImage Icon="PieChart" Style="{StaticResource menuButtonIcon}"/>
                                 <TextBlock Text="Report" Style="{StaticResource menuButtonText}"/>
@@ -98,7 +111,8 @@
                         </RadioButton>
                         
                         <RadioButton Style="{StaticResource menuButton}"
-                                     Tag="{StaticResource color4}">
+                                     Tag="{StaticResource color4}"
+                                     Command="{Binding ShowSettingView}">
                             <StackPanel Orientation="Horizontal">
                                 <fa:IconImage Icon="Gear" Style="{StaticResource menuButtonIcon}"/>
                                 <TextBlock Text="Setting" Style="{StaticResource menuButtonText}"/>
@@ -106,7 +120,8 @@
                         </RadioButton>
 
                         <RadioButton Style="{StaticResource menuButton}"
-                                     Tag="{StaticResource color5}">
+                                     Tag="{StaticResource color5}"
+                                     Command="{Binding ShowSupportView}">
                             <StackPanel Orientation="Horizontal">
                                 <fa:IconImage Icon="headset" Style="{StaticResource menuButtonIcon}"/>
                                 <TextBlock Text="Support" Style="{StaticResource menuButtonText}"/>
