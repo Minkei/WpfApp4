@@ -3,10 +3,58 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:WpfApp4.Views"
+             xmlns:local="clr-namespace:WpfApp4.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <local:QRScannerViewModel/>
+    </UserControl.DataContext>
     <Grid>
-        <Image Source="/Images/dashboard-template-1024x589.png"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.4*"/>
+            <ColumnDefinition Width="0.6*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center">
+                <ComboBox Name="cmbCameraDevices"
+                          ItemsSource="{Binding AvailableCameras}"
+                          DisplayMemberPath="CameraName"
+                          Foreground="Black"
+                          SelectedItem="{Binding SelectedCamera, Mode=TwoWay}"
+                          Width="150"
+                          Margin="5,0,5,0"/>
+                <Button Content="Start"
+                        Width="60"
+                        Margin="3,0,3,0"
+                        Command="{Binding StartStreamCommand}"
+                        />
+                <Button Content="Stop"
+                        Width="60"
+                        Margin="3,0,3,0"
+                        Command="{Binding StopStreamCommand}"
+                        />
+            </StackPanel>
+            <StackPanel Grid.Row="1"
+                        Orientation="Vertical"
+                        HorizontalAlignment="Center">
+                <TextBlock Text="{Binding SelectedCamera.CameraName}"/>
+                <Image  Source="{Binding CurrentFrame}" Stretch="UniformToFill" Margin="10"/>
+            </StackPanel>
+            <StackPanel Grid.Row="2"
+                        Orientation="Vertical"
+                        HorizontalAlignment="Center">
+                <TextBlock Text="{Binding SelectedCamera.CameraName}"/>
+                <Image  Source="{Binding CurrentFrame}" Stretch="UniformToFill" Margin="10"/>
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>

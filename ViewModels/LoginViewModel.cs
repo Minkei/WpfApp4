@@ -16,9 +16,9 @@ namespace WpfApp4.ViewModels
     public class LoginViewModel : ViewModelBase
     {
         //Fields
-        private string _username = string.Empty;
-        private SecureString _password;
-        private string _errorMessage = string.Empty;
+        private string? _username = string.Empty;
+        private SecureString? _password;
+        private string? _errorMessage = string.Empty;
         private bool _isViewVisible = true;
         private IUserRepository userRepository;
 
@@ -29,10 +29,10 @@ namespace WpfApp4.ViewModels
         public bool IsViewVisible { get { return _isViewVisible; } set { _isViewVisible = value; OnPropertyChanged(nameof(IsViewVisible)); } }
 
         //Commands
-        public ICommand LoginCommand { get; }
-        public ICommand RecoverPasswordCommand { get; }
-        public ICommand ShowPasswordCommand { get; }
-        public ICommand RemenberPasswordCommand { get; }
+        public ICommand? LoginCommand { get; }
+        public ICommand? RecoverPasswordCommand { get; }
+        public ICommand? ShowPasswordCommand { get; }
+        public ICommand? RemenberPasswordCommand { get; }
 
         //Constructor
         public LoginViewModel()

@@ -1,0 +1,2 @@
+﻿1. thêm enter key down vào password box
+2. thêm auto refresh combox select camera mỗi khi drop down open

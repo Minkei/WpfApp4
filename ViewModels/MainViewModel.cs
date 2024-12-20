@@ -16,10 +16,10 @@ namespace WpfApp4.ViewModels
     public class MainViewModel:ViewModelBase
     {
         //Fields
-        private UserAccountModel _currentUserAccount;
+        private UserAccountModel? _currentUserAccount;
         private IUserRepository userRepository;
-        private ViewModelBase _currentChildView;
-        private string _caption;
+        private ViewModelBase? _currentChildView;
+        private string? _caption;
         private IconChar _icon;
 
         public UserAccountModel CurrentUserAccount

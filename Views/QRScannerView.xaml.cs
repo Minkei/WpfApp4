@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WpfApp4.Models;
+using WpfApp4.ViewModels;
 
 namespace WpfApp4.Views
 {

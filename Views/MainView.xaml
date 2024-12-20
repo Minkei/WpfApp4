@@ -237,7 +237,6 @@
                 <ContentControl Grid.Row="2"
                                 Content="{Binding CurrentChildView}"
                                 Margin="25">
-                    
                 </ContentControl>
             </Grid>
         </Grid>

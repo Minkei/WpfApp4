@@ -7,39 +7,47 @@ using System.Windows.Input;
 
 namespace WpfApp4.ViewModels
 {
+    /// <summary>
+    /// Represents a command that can be bound to UI elements in WPF applications.
+    /// </summary>
     public class ViewModelCommand : ICommand
     {
-        //Fields
-        private readonly Action<object> _executeAction;
-        private readonly Predicate<object> _canExecuteAction;
+        // Fields
+        private readonly Action<object>? _executeAction;
+        private readonly Predicate<object>? _canExecuteAction;
 
-        //Constructors
-        public ViewModelCommand(Action<object> executeAction)
+        // Constructors
+        public ViewModelCommand(Action<object>? executeAction)
         {
             _executeAction = executeAction;
             _canExecuteAction = null;
         }
-        public ViewModelCommand(Action<object> executeAction, Predicate<object> canExecuteAction)
+
+        public ViewModelCommand(Action<object>? executeAction, Predicate<object>? canExecuteAction)
         {
             _executeAction = executeAction;
             _canExecuteAction = canExecuteAction;
         }
 
-        //Events
+        // Events
         public event EventHandler? CanExecuteChanged {
-            add {CommandManager.RequerySuggested += value;}
+            add { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }
         }
 
-        //Methods
-        public bool CanExecute(object parameter)
+        // Methods
+        public bool CanExecute(object? parameter)
         {
-            return _canExecuteAction == null ? true : _canExecuteAction(parameter);
+            return _canExecuteAction == null || _canExecuteAction(parameter);
         }
 
-        public void Execute(object parameter)
+        public void Execute(object? parameter)
         {
-            _executeAction(parameter);
+            _executeAction?.Invoke(parameter);
+        }
+        public void RaiseCanExecuteChanged()
+        {
+            CommandManager.InvalidateRequerySuggested();
         }
     }
 }

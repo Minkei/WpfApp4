@@ -53,7 +53,7 @@ namespace WpfApp4.Repositories
 
         public UserModel GetByUsername(string username)
         {
-            UserModel user = null;
+            UserModel? user = null;
             using (var connection = GetConnection())
             using (var command = new SqlCommand())
             {
@@ -77,7 +77,7 @@ namespace WpfApp4.Repositories
                     }
                 }
             }
-            return user;
+            return user ?? null;
         }
 
         public void Remove(UserModel userModel)
