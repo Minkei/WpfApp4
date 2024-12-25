@@ -22,25 +22,29 @@ using ZXing;
 using ZXing.Common;
 using OpenCvSharp.Extensions;
 using ZXing.QrCode;
+using System.Windows.Media.Media3D;
 
 namespace WpfApp4.ViewModels
 {
     public class QRScannerViewModel : ViewModelBase
     {
         private VideoCapture? _videoCapture;
-        private BitmapSource? _currentFrame;
         private bool _isStreaming;
-        private ObservableCollection<CameraDevice>? _availableCameras;
         private CameraDevice? _selectedCamera;
         private bool _isProcessing;
+        private ObservableCollection<CameraDevice>? _availableCameras;
         private string _qrCodeContent = string.Empty;
+        private BitmapSource? _currentFrame;
+        
         public QRScannerViewModel()
         {
             LoadAvailableCameras();
             StartStreamCommand = new ViewModelCommand(ExecuteStartStream, CanExecuteStartStream);
             StopStreamCommand = new ViewModelCommand(ExecuteStopStream, CanExecuteStopStream);
-        }
 
+            StartStreamCommand = new ViewModelCommand(ExecuteStartStream, CanExecuteStartStream);
+            StopStreamCommand = new ViewModelCommand(ExecuteStopStream, CanExecuteStopStream);
+        }
 
         public ObservableCollection<CameraDevice>? AvailableCameras {
             get => _availableCameras;
@@ -123,6 +127,7 @@ namespace WpfApp4.ViewModels
             return _isStreaming;
         }
 
+
         private async void ExecuteStartStream(object? parameter)
         {
             if (SelectedCamera == null) return;
@@ -159,7 +164,7 @@ namespace WpfApp4.ViewModels
             }
         }
 
-        
+
         private async Task ProcessCameraStream()
         {
             var qrCodeDectector = new QRCodeDetector();
@@ -180,8 +185,8 @@ namespace WpfApp4.ViewModels
 
                     /// Detect and decode 
                     Point2f[] points;
-                    string qrCodeData = qrCodeDectector.DetectAndDecode(frame,out points);
-                    if(!string.IsNullOrEmpty(qrCodeData))
+                    string qrCodeData = qrCodeDectector.DetectAndDecode(frame, out points);
+                    if (!string.IsNullOrEmpty(qrCodeData))
                     {
                         QRCodeContent = qrCodeData;
                     }

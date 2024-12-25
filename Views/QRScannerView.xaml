@@ -8,10 +8,9 @@
              d:DataContext="{d:DesignInstance Type=local:QRScannerViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="654" d:DesignWidth="1056">
-    <UserControl.DataContext>
+    <!--<UserControl.DataContext>
         <local:QRScannerViewModel/>
-    </UserControl.DataContext>
-
+    </UserControl.DataContext>-->
 
     <Grid>
         <Grid.RowDefinitions>
@@ -302,6 +301,4 @@
             </Border>
         </Grid>
     </Grid>
-    
-    
 </UserControl>
