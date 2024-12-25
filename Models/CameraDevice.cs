@@ -9,6 +9,8 @@ namespace WpfApp4.Models
     public class CameraDevice
     {
         public string? CameraName { get; set; }
-        public string? CameraIndex { get; set; }
+        public int CameraIndex { get; set; }
+        public int CameraWidth { get; set; }
+        public int CameraHeight { get; set; }
     }
 }

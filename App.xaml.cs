@@ -12,7 +12,7 @@ namespace WpfApp4
     {
         protected void ApplicationStart(object sender, StartupEventArgs e)
         {
-            var loginView = new LoginView();    
+            var loginView = new LoginView();
             loginView.Show();
             loginView.IsVisibleChanged += (s, ev) =>
             {
