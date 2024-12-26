@@ -5,24 +5,22 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WpfApp4.ViewModels"
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp" 
-             d:DataContext="{d:DesignInstance Type=local:QRScannerViewModel}"
+             d:DataContext="{d:DesignInstance Type=local:MainViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="654" d:DesignWidth="1056">
-    
-    <UserControl.Resources>
-        <local:BooleanToInverseConverter x:Key="BooleanToInverseConverter"/>
-    </UserControl.Resources>
+    <UserControl.DataContext>
+        <local:MainViewModel/>
+    </UserControl.DataContext>
 
-
-    <Grid>
+    <!--<Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal"
                     VerticalAlignment="Center">
-            
-            <!--Block Timer-->
+                    
+            --><!--Block Timer--><!--
             <Border CornerRadius="5"
                     HorizontalAlignment="Left"
                     BorderBrush="{StaticResource ResourceKey=color1}"
@@ -48,7 +46,7 @@
                                Text="10:00:00"/>
                 </StackPanel>
             </Border>
-            <!--Block Date-->
+            --><!--Block Date--><!--
             <Border CornerRadius="5"
                     HorizontalAlignment="Left"
                     BorderBrush="{StaticResource ResourceKey=color1}"
@@ -74,7 +72,7 @@
                     </StackPanel>
             </Border>
             
-            <!--Block ComboBox select camera-->
+            --><!--Block ComboBox select camera--><!--
             
             <Border CornerRadius="5"
                     HorizontalAlignment="Center"
@@ -95,7 +93,7 @@
                            FontWeight="Bold"
                            Padding="10"/>
                     <ComboBox Name="cmbCameraDevices"
-                              ItemsSource="{Binding AvailableCameras, Mode=TwoWay}"
+                              ItemsSource="{Binding AvailableCameras}"
                               SelectedItem="{Binding SelectedCamera, Mode=TwoWay}"
                               Width="180" Height="25"
                               DisplayMemberPath="CameraName">
@@ -140,17 +138,17 @@
                 </StackPanel>
             </Border>
 
-            <!--Block Start button-->
+            --><!--Block Start button--><!--
             <Button Style="{StaticResource StartButtonStyle}"
                     Command="{Binding StartStreamCommand}"
-                    IsEnabled="{Binding IsStreaming, Converter={StaticResource BooleanToInverseConverter}}">
+                    IsEnabled="True">
             </Button>
             
 
-            <!--Block Stop button-->
+            --><!--Block Stop button--><!--
             <Button Style="{StaticResource StopButtonStyle}"
                     Command="{Binding StopStreamCommand}"
-                    IsEnabled="{Binding IsStreaming}">
+                    IsEnabled="True">
             </Button>
             
         </StackPanel>
@@ -161,39 +159,18 @@
                 <ColumnDefinition Width="0.4*"/>
             </Grid.ColumnDefinitions>
             
-            <!--Block data table-->
+            --><!--Block data table--><!--
             <Border Grid.Column="0"
                     CornerRadius="5"
                     Background="#200F53"
-                    Margin="10">
-                <!--<DataGrid ColumnWidth="*"
-                          Background="#200F53"
-                          BorderThickness="0">
-                    <DataGrid.ColumnHeaderStyle>
-                        <Style TargetType="DataGridColumnHeader">
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="Foreground" Value="#BCBEE0"/>
-                            <Setter Property="Padding" Value="10,0,0,10"/>
-                            <Setter Property="FontFamily" Value="Montserrat"/>
-                            <Setter Property="FontSize" Value="15"/>
-                            <Setter Property="FontWeight" Value="Bold"/>
-                        </Style>
-                    </DataGrid.ColumnHeaderStyle>
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="No." HeaderStringFormat=""/>
-                        <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Serial number"/>
-                        <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Date"/>
-                        <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Time"/>
-                        <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Status"/>
-                    </DataGrid.Columns>
-                </DataGrid>-->
+                    Margin="0,10,10,0">
             </Border>
                 
-            <!--Block QR Scanning-->
+            --><!--Block QR Scanning--><!--
             <Border Grid.Column="1"
                     CornerRadius="5"
                     Background="#200F53"
-                    Margin="10">
+                    Margin="10,10,0,0">
                 <Grid Width="300" Height="480">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="20"/>
@@ -217,6 +194,7 @@
                                FontStyle="Italic"
                                Foreground="{StaticResource titleColor3}"
                                HorizontalAlignment="Center"/>
+                    
                     <TextBlock x:Name="TextBlobkScanning"
                                Grid.Row="2" 
                                Text="QR Scanner"
@@ -226,13 +204,15 @@
                                FontSize="30"
                                FontWeight="Black"
                                FontFamily="Montserrat"/>
+                    
                     <StackPanel Grid.Row="3"
                                 Height="80"
                                 Orientation="Horizontal"
                                 VerticalAlignment="Center"
                                 Margin="0,10,0,0">
-                        <!--<Image Source="/images/qr-code.jpg" Width="80" Height="80"/>-->
+                        
                         <fa:IconImage Icon="Qrcode" Width="80" Height="80" Foreground="DarkGray"/>
+                        
                         <StackPanel Orientation="Vertical"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top">
@@ -244,6 +224,7 @@
                                        FontWeight="Medium"
                                        Foreground="{StaticResource titleColor2}"
                                        HorizontalAlignment="Left"/>
+                            
                             <TextBlock Text="{Binding QRCodeContent}"
                                        Margin="10,10,0,0"
                                        FontSize="12"
@@ -251,8 +232,9 @@
                                        FontStyle="Italic"
                                        Foreground="{StaticResource titleColor3}"
                                        HorizontalAlignment="Left"/>
-                            <TextBlock Text="{Binding IsStreaming}"
-                                       Margin="10,10,0,0"
+
+                            <TextBlock Text="{Binding StreamingStatus}"
+                                       Margin="10,0,0,0"
                                        FontSize="12"
                                        FontFamily="Montserrat"
                                        FontStyle="Italic"
@@ -263,5 +245,5 @@
                 </Grid>
             </Border>
         </Grid>
-    </Grid>
+    </Grid>-->
 </UserControl>

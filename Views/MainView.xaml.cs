@@ -13,6 +13,8 @@ using System.Windows.Automation;
 using System.Windows.Interop;
 using WpfApp4.ViewModels;
 using WpfApp4.Views;
+using System.Windows.Threading;
+using Microsoft.VisualBasic;
 
 namespace WpfApp4
 {
@@ -21,10 +23,12 @@ namespace WpfApp4
     /// </summary>
     public partial class MainView : Window
     {
+        private DispatcherTimer? _timer;
         public MainView()
         {
             InitializeComponent();
             this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
+            StartClock();
         }
 
         [DllImport("user32.dll")]
@@ -56,6 +60,39 @@ namespace WpfApp4
             if(this.WindowState==WindowState.Normal)
                 this.WindowState = WindowState.Maximized;
             else this.WindowState = WindowState.Normal;
+        }
+
+
+
+
+        private void StartClock()
+        {
+            //Initialize the dispatcher timer
+            _timer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(1)
+            };
+            _timer.Tick += OnTimerTick;
+            _timer.Start();
+            //Display the initialize time
+            UpdateClock();
+            UpdateDate();
+
+        }
+
+        private void UpdateDate()
+        {
+            TextBlockDate.Text = DateTime.Now.ToString("dd/MM/yyyy");
+        }
+
+        private void OnTimerTick(object? sender, EventArgs e)
+        {
+            UpdateClock();
+        }
+
+        private void UpdateClock()
+        {
+            TextBlockClock.Text = DateAndTime.TimeString;
         }
     }
 }

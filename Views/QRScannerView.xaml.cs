@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualBasic;
+using OpenCvSharp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,61 +17,48 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using WpfApp4.Models;
+using WpfApp4.Services;
 using WpfApp4.ViewModels;
 
 namespace WpfApp4.Views
 {
-    /// <summary>
-    /// Interaction logic for QRScannerView.xaml
-    /// </summary>
     public partial class QRScannerView : UserControl
     {
-        private DispatcherTimer? _timer;
+        //private DispatcherTimer? _timer;
         public QRScannerView()
         {
             InitializeComponent();
-            StartClock();
-            this.DataContext = new QRScannerViewModel(new Services.QRScannerService());
-            if (this.DataContext is QRScannerViewModel viewModel)
-            {
-                Debug.WriteLine("DataContext is set correctly: " + viewModel.IsStreaming);
-            }
-            else
-            {
-                Debug.WriteLine("DataContext is NOT set correctly.");
-            }
+            /*StartClock()*/;
         }
 
-        private void StartClock()
-        {
-            //Initialize the dispatcher timer
-            _timer = new DispatcherTimer
-            {
-                Interval = TimeSpan.FromSeconds(1)
-            };
-            _timer.Tick += OnTimerTick;
-            _timer.Start();
-            //Display the initialize time
-            UpdateClock();
-            UpdateDate();
+        //private void StartClock()
+        //{
+        //    //Initialize the dispatcher timer
+        //    _timer = new DispatcherTimer
+        //    {
+        //        Interval = TimeSpan.FromSeconds(1)
+        //    };
+        //    _timer.Tick += OnTimerTick;
+        //    _timer.Start();
+        //    //Display the initialize time
+        //    UpdateClock();
+        //    UpdateDate();
 
-        }
+        //}
 
-        private void UpdateDate()
-        {
-            TextBlockDate.Text = DateTime.Now.ToString("dd/MM/yyyy");
-        }
+        //private void UpdateDate()
+        //{
+        //    TextBlockDate.Text = DateTime.Now.ToString("dd/MM/yyyy");
+        //}
 
-        private void OnTimerTick(object? sender, EventArgs e)
-        {
-            UpdateClock();
-        }
+        //private void OnTimerTick(object? sender, EventArgs e)
+        //{
+        //    UpdateClock();
+        //}
 
-        private void UpdateClock()
-        {
-            //Update the text block with the current time
-            TextBlockClock.Text = DateAndTime.TimeString;
-
-        }
+        //private void UpdateClock()
+        //{
+        //    TextBlockClock.Text = DateAndTime.TimeString;
+        //}
     }
 }

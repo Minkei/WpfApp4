@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp4.Views" 
         xmlns:viewModel="clr-namespace:WpfApp4.ViewModels"
-        xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+        xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp" 
         mc:Ignorable="d"
         Title="MainView"
         Height="768"
@@ -13,11 +13,13 @@
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         AllowsTransparency="True"
-        Background="Transparent"
-        >
+        Background="Transparent">
+
     <Window.DataContext>
         <viewModel:MainViewModel/>
     </Window.DataContext>
+
+
 
     <Window.Resources>
         <DataTemplate DataType="{x:Type viewModel:QRScannerViewModel}">
@@ -39,6 +41,9 @@
         <DataTemplate DataType="{x:Type viewModel:SupportViewModel}">
             <local:SupportView/>
         </DataTemplate>
+
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <local:StatusFormatConverter x:Key="StatusFormatConverter"/>
     </Window.Resources>
 
     <!--<Window.Resources>
@@ -232,12 +237,270 @@
                                 Tag="{StaticResource color5}">
                             <fa:IconImage Icon="Bell" Style="{StaticResource iconButtonIcon}"/>
                         </Button>
+
+                        <Label Content="{Binding StreamingStatus}"
+                                   Foreground="{StaticResource titleColor3}"
+                                   FontSize="12"
+                                   FontFamily="Montserrat"
+                                   VerticalAlignment="Center"/>
+                        <Label Content="{Binding SelectedCamera.CameraWidth}"
+                               Foreground="{StaticResource titleColor3}"
+                               FontSize="12"
+                               FontFamily="Montserrat"
+                               VerticalAlignment="Center"/>
+                        <Label Content="{Binding SelectedCamera.CameraName}"
+                               Foreground="{StaticResource titleColor3}"
+                               FontSize="12"
+                               FontFamily="Montserrat"
+                               VerticalAlignment="Center"/>
+
+
                     </StackPanel>
                 </Grid>
-                <ContentControl Grid.Row="2"
+                
+                <!--<ContentControl Grid.Row="2"
                                 Content="{Binding CurrentChildView}"
                                 Margin="25">
-                </ContentControl>
+                </ContentControl>-->
+                
+                <!--Main UI-->
+                <Grid Grid.Row="2"
+                      Margin="10"
+                      Visibility="{Binding IsQRScannerViewVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal"
+                                VerticalAlignment="Center">
+
+                        <!--Block Timer-->
+                        <Border CornerRadius="5"
+                                HorizontalAlignment="Left"
+                                BorderBrush="{StaticResource ResourceKey=color1}"
+                                BorderThickness="0"
+                                Width="150"
+                                Height="35"
+                                Background="#200F53"
+                                Margin="10,0,0,0">
+                            <StackPanel Grid.Row="0"
+                                        Orientation="Horizontal"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center">
+                                <fa:IconImage Icon="Clock" Width="20" Height="20" Foreground="{StaticResource titleColor2}" Margin="10,0,0,0"/>
+                                <TextBlock x:Name="TextBlockClock"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           FontSize="12"
+                                           FontWeight="Bold"
+                                           FontFamily="Montserrat"
+                                           Foreground="{StaticResource titleColor2}"
+                                           TextAlignment="Center"
+                                           Padding="10"
+                                           Text="10:00:00"/>
+                            </StackPanel>
+                        </Border>
+                        <!--Block Date-->
+                        <Border CornerRadius="5"
+                                HorizontalAlignment="Left"
+                                BorderBrush="{StaticResource ResourceKey=color1}"
+                                Background="#200F53"
+                                BorderThickness="0"
+                                Width="150"
+                                Height="35"
+                                Margin="30,0,0,0">
+                            <StackPanel Orientation="Horizontal"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center">
+                                <fa:IconImage Icon="Calendar" Width="20" Height="20" Foreground="{StaticResource titleColor2}" Margin="10,0,0,0"/>
+                                <TextBlock x:Name="TextBlockDate"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           FontSize="12"
+                                           FontWeight="Bold"
+                                           FontFamily="Montserrat"
+                                           Foreground="{StaticResource titleColor2}"
+                                           TextAlignment="Center"
+                                           Padding="10"
+                                           Text="24/12/2024"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!--Block ComboBox select camera-->
+
+                        <Border CornerRadius="5"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                BorderThickness="0"
+                                BorderBrush="{StaticResource ResourceKey=color1}"
+                                Width="300"
+                                Height="35"
+                                Background="#200F53"
+                                Margin="30,0,0,0">
+                            <StackPanel Orientation="Horizontal"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center">
+                                <Label Content="Select camera"
+                                       Foreground ="{StaticResource titleColor2}"
+                                       FontSize="12"
+                                       FontFamily="Montserrat"
+                                       FontWeight="Bold"
+                                       Padding="10"/>
+                                <ComboBox Name="cmbCameraDevices"
+                                          ItemsSource="{Binding AvailableCameras}"
+                                          SelectedItem="{Binding SelectedCamera, Mode=TwoWay}"
+                                          Width="180" Height="25"
+                                          DisplayMemberPath="CameraName">
+                                    <ComboBox.Template>
+                                        <ControlTemplate TargetType="ComboBox">
+                                            <Border BorderBrush="{TemplateBinding BorderBrush}"
+                                                    BorderThickness="1"
+                                                    CornerRadius="5"
+                                                    Background="DarkGray">
+                                                <Grid>
+                                                    <ToggleButton x:Name="ToggleButton"
+                                                                  Height="25"
+                                                                  Focusable="False"
+                                                                  IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ComboBox}}"
+                                                                  ClickMode="Press"
+                                                                  Background="Transparent"
+                                                                  BorderBrush="Transparent"
+                                                                  ContentTemplate="{TemplateBinding ItemTemplate}"
+                                                                  Content="{Binding Path=SelectedCamera.CameraName}"
+                                                                  VerticalAlignment="Center">   
+                                                    </ToggleButton>
+                                                    <Popup x:Name="DropDown"
+                                                           IsOpen="{TemplateBinding IsDropDownOpen}"
+                                                           Placement="Bottom"
+                                                           Focusable="False"
+                                                           AllowsTransparency="True"
+                                                           Width="180">
+                                                        <Border CornerRadius="5"
+                                                                Background="DarkGray"
+                                                                BorderBrush="Gray"
+                                                                BorderThickness="1">
+                                                            <ScrollViewer>
+                                                                <ItemsPresenter/>
+                                                            </ScrollViewer>
+                                                        </Border>
+                                                    </Popup>
+                                                </Grid>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </ComboBox.Template>
+                                </ComboBox>
+                            </StackPanel>
+                        </Border>
+
+                        <!--Block Start button-->
+                        <Button Style="{StaticResource StartButtonStyle}"
+                                Command="{Binding StartStreamCommand}"
+                                IsEnabled="True">
+                        </Button>
+
+
+                        <!--Block Stop button-->
+                        <Button Style="{StaticResource StopButtonStyle}"
+                                Command="{Binding StopStreamCommand}"
+                                IsEnabled="True">
+                        </Button>
+
+                    </StackPanel>
+
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.6*"/>
+                            <ColumnDefinition Width="0.4*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!--Block data table-->
+                        <Border Grid.Column="0"
+                                CornerRadius="5"
+                                Background="#200F53"
+                                Margin="0,5,5,0">
+                        </Border>
+
+                        <!--Block QR Scanning-->
+                        <Border Grid.Column="1"
+                                CornerRadius="5"
+                                Background="#200F53"
+                                Margin="5,5,0,0">
+                            <Grid Width="300" Height="480">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="20"/>
+                                    <RowDefinition Height="300"/>
+                                    <RowDefinition Height="50"/>
+                                    <RowDefinition Height="100"/>
+                                </Grid.RowDefinitions>
+                                <Border Grid.Row="1"
+                                        CornerRadius="10"
+                                        BorderBrush="Aqua"
+                                        BorderThickness="1">
+                                    <Image Source="{Binding CurrentFrame}"
+                                           Stretch="Uniform"
+                                           Width="300"/>
+                                </Border>
+                                <TextBlock Text="{Binding SelectedCamera.CameraName, StringFormat='Scanned by {0}'}"
+                                           Margin="10,0,0,0"
+                                           FontSize="12"
+                                           Grid.Row="0"
+                                           FontFamily="Montserrat"
+                                           FontStyle="Italic"
+                                           Foreground="{StaticResource titleColor3}"
+                                           HorizontalAlignment="Center"/>
+
+                                <TextBlock x:Name="TextBlobkScanning"
+                                           Grid.Row="2" 
+                                           Text="QR Scanner"
+                                           Foreground="{StaticResource titleColor2}"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center"
+                                           FontSize="30"
+                                           FontWeight="Black"
+                                           FontFamily="Montserrat"/>
+
+                                <StackPanel Grid.Row="3"
+                                            Height="80"
+                                            Orientation="Horizontal"
+                                            VerticalAlignment="Center"
+                                            Margin="0,10,0,0">
+
+                                    <fa:IconImage Icon="Qrcode" Width="80" Height="80" Foreground="DarkGray"/>
+
+                                    <StackPanel Orientation="Vertical"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Top">
+                                        <TextBlock Text="Lastest QR Code:"
+                                                   Margin="10,5,0,0"
+                                                   FontSize="12"
+                                                   FontFamily="Montserrat"
+                                                   FontStyle="Normal"
+                                                   FontWeight="Medium"
+                                                   Foreground="{StaticResource titleColor2}"
+                                                   HorizontalAlignment="Left"/>
+
+                                        <TextBlock Text="{Binding QRCodeContent}"
+                                                   Margin="10,5,0,0"
+                                                   FontSize="12"
+                                                   FontFamily="Montserrat"
+                                                   FontStyle="Italic"
+                                                   Foreground="{StaticResource titleColor3}"
+                                                   HorizontalAlignment="Left"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Grid>
+
+                <!--Data UI-->
+                
+                <!--Report UI-->
+                
+                <!--Setting UI-->
+                
+                <!--Support UI-->
+                
             </Grid>
         </Grid>
     </Border>

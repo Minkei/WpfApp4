@@ -170,8 +170,6 @@
         <Setter Property="Margin" Value="30,0,0,0"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Background" Value="#200F53"/>
-        <Setter Property="IsEnabled" Value="False"/>
-        <!--<Setter Property="IsEnabled" Value="{Binding Path=Tag, RelativeSource={RelativeSource AncestorType=Button}}"/>-->
 
         <Setter Property="Template">
             <Setter.Value>
@@ -186,10 +184,13 @@
                             <!-- Hover color -->
                         </Trigger>
                         <!-- Trigger for IsPressed -->
-                        <Trigger Property="IsPressed" Value="True">
+                        <!--<Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="ButtonBorder" Property="Background" Value="#1A237E"/>
-                            <!-- Pressed color -->
-                        </Trigger>
+                            --><!-- Pressed color --><!--
+                        </Trigger>-->
+                        <DataTrigger Binding="{Binding Path=StreamingStatus}" Value="Streaming" >
+                            <Setter TargetName="ButtonBorder" Property="Background" Value="#304FFE"/>
+                        </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -223,7 +224,6 @@
         <Setter Property="Margin" Value="30,0,0,0"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Background" Value="#200F53"/>
-        <!--<Setter Property="IsEnabled" Value="{Binding Path=Tag, RelativeSource={RelativeSource AncestorType=Button}}"/>-->
 
         <Setter Property="Template">
             <Setter.Value>
@@ -236,9 +236,12 @@
                             <Setter TargetName="ButtonBorder" Property="Background" Value="#FF5722"/>
                         </Trigger>
 
-                        <Trigger Property="IsPressed" Value="True">
+                        <!--<Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="ButtonBorder" Property="Background" Value="#1A237E"/>
-                        </Trigger>
+                        </Trigger>-->
+                        <DataTrigger Binding="{Binding Path=StreamingStatus}" Value="Stopped" >
+                            <Setter TargetName="ButtonBorder" Property="Background" Value="#FF5722"/>
+                        </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
