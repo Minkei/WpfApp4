@@ -11,6 +11,8 @@ using System.Windows.Shapes;
 using System.Runtime.InteropServices;
 using System.Windows.Automation;
 using System.Windows.Interop;
+using WpfApp4.ViewModels;
+using WpfApp4.Views;
 
 namespace WpfApp4
 {

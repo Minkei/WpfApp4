@@ -160,4 +160,108 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style x:Key="StartButtonStyle" TargetType="Button">
+        <!-- Set default properties -->
+        <Setter Property="Width" Value="150"/>
+        <Setter Property="Height" Value="35"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="30,0,0,0"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Background" Value="#200F53"/>
+        <Setter Property="IsEnabled" Value="False"/>
+        <!--<Setter Property="IsEnabled" Value="{Binding Path=Tag, RelativeSource={RelativeSource AncestorType=Button}}"/>-->
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="ButtonBorder" CornerRadius="5" Background="{TemplateBinding Background}" Width="150">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <!-- Trigger for IsMouseOver -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="ButtonBorder" Property="Background" Value="#304FFE"/>
+                            <!-- Hover color -->
+                        </Trigger>
+                        <!-- Trigger for IsPressed -->
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="ButtonBorder" Property="Background" Value="#1A237E"/>
+                            <!-- Pressed color -->
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="Content">
+            <Setter.Value>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <fa:IconImage Icon="Play" Width="20" Height="20" Foreground="{StaticResource titleColor2}" Margin="10,0,0,0"/>
+                    <TextBlock HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontSize="12"
+                           FontWeight="Bold"
+                           FontFamily="Montserrat"
+                           Foreground="{StaticResource titleColor2}"
+                           TextAlignment="Center"
+                           Padding="10"
+                           Text="Start"/>
+                </StackPanel>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style x:Key="StopButtonStyle" TargetType="Button">
+        <!-- Set default properties -->
+        <Setter Property="Width" Value="150"/>
+        <Setter Property="Height" Value="35"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="30,0,0,0"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Background" Value="#200F53"/>
+        <!--<Setter Property="IsEnabled" Value="{Binding Path=Tag, RelativeSource={RelativeSource AncestorType=Button}}"/>-->
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="ButtonBorder" CornerRadius="5" Background="{TemplateBinding Background}" Width="150">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="ButtonBorder" Property="Background" Value="#FF5722"/>
+                        </Trigger>
+
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="ButtonBorder" Property="Background" Value="#1A237E"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="Content">
+            <Setter.Value>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <fa:IconImage Icon="Pause" Width="20" Height="20" Foreground="{StaticResource titleColor2}" Margin="10,0,0,0"/>
+                    <TextBlock HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontSize="12"
+                       FontWeight="Bold"
+                       FontFamily="Montserrat"
+                       Foreground="{StaticResource titleColor2}"
+                       TextAlignment="Center"
+                       Padding="10"
+                       Text="Stop"/>
+                </StackPanel>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
 </ResourceDictionary>

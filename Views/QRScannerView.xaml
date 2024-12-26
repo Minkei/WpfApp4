@@ -8,9 +8,11 @@
              d:DataContext="{d:DesignInstance Type=local:QRScannerViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="654" d:DesignWidth="1056">
-    <!--<UserControl.DataContext>
-        <local:QRScannerViewModel/>
-    </UserControl.DataContext>-->
+    
+    <UserControl.Resources>
+        <local:BooleanToInverseConverter x:Key="BooleanToInverseConverter"/>
+    </UserControl.Resources>
+
 
     <Grid>
         <Grid.RowDefinitions>
@@ -139,64 +141,18 @@
             </Border>
 
             <!--Block Start button-->
-            <Button Command="{Binding StartStreamCommand}" 
-                    Width="150" Height="35"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Margin="30,0,0,0"
-                    Cursor="Hand">
-                <Button.Template>
-                    <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="5"
-                                Background="#200F53"
-                                Width="150">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Button.Template>
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <fa:IconImage Icon="Play" Width="20" Height="20" Foreground="{StaticResource titleColor2}" Margin="10,0,0,0"/>
-                    <TextBlock HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               FontSize="12"
-                               FontWeight="Bold"
-                               FontFamily="Montserrat"
-                               Foreground="{StaticResource titleColor2}"
-                               TextAlignment="Center"
-                               Padding="10"
-                               Text="Start"/>
-                </StackPanel>
+            <Button Style="{StaticResource StartButtonStyle}"
+                    Command="{Binding StartStreamCommand}"
+                    IsEnabled="{Binding IsStreaming, Converter={StaticResource BooleanToInverseConverter}}">
             </Button>
+            
 
             <!--Block Stop button-->
-            <Button Command="{Binding StopStreamCommand}" 
-                    Width="150" Height="35"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Margin="30,0,0,0"
-                    Cursor="Hand">
-                <Button.Template>
-                    <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="5"
-                                Background="#200F53"
-                                Width="150">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Button.Template>
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <fa:IconImage Icon="Pause" Width="20" Height="20" Foreground="{StaticResource titleColor2}" Margin="10,0,0,0"/>
-                    <TextBlock HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               FontSize="12"
-                               FontWeight="Bold"
-                               FontFamily="Montserrat"
-                               Foreground="{StaticResource titleColor2}"
-                               TextAlignment="Center"
-                               Padding="10"
-                               Text="Stop"/>
-                </StackPanel>
+            <Button Style="{StaticResource StopButtonStyle}"
+                    Command="{Binding StopStreamCommand}"
+                    IsEnabled="{Binding IsStreaming}">
             </Button>
+            
         </StackPanel>
  
         <Grid Grid.Row="1">
@@ -289,6 +245,13 @@
                                        Foreground="{StaticResource titleColor2}"
                                        HorizontalAlignment="Left"/>
                             <TextBlock Text="{Binding QRCodeContent}"
+                                       Margin="10,10,0,0"
+                                       FontSize="12"
+                                       FontFamily="Montserrat"
+                                       FontStyle="Italic"
+                                       Foreground="{StaticResource titleColor3}"
+                                       HorizontalAlignment="Left"/>
+                            <TextBlock Text="{Binding IsStreaming}"
                                        Margin="10,10,0,0"
                                        FontSize="12"
                                        FontFamily="Montserrat"

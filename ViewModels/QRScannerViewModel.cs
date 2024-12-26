@@ -23,51 +23,60 @@ using ZXing.Common;
 using OpenCvSharp.Extensions;
 using ZXing.QrCode;
 using System.Windows.Media.Media3D;
+using WpfApp4.Services;
+using System.Windows.Controls;
 
 namespace WpfApp4.ViewModels
 {
     public class QRScannerViewModel : ViewModelBase
     {
-        private VideoCapture? _videoCapture;
-        private bool _isStreaming;
-        private CameraDevice? _selectedCamera;
-        private bool _isProcessing;
-        private ObservableCollection<CameraDevice>? _availableCameras;
+        private readonly QRScannerService _qrScannerService = new();
         private string _qrCodeContent = string.Empty;
         private BitmapSource? _currentFrame;
-        
-        public QRScannerViewModel()
-        {
-            LoadAvailableCameras();
-            StartStreamCommand = new ViewModelCommand(ExecuteStartStream, CanExecuteStartStream);
-            StopStreamCommand = new ViewModelCommand(ExecuteStopStream, CanExecuteStopStream);
 
+        public QRScannerViewModel(QRScannerService qrScannerService)
+        {
+            //_qrScannerService = qrScannerService;
+            _qrScannerService.QRCodeDetected += OnQRCodeDetected;
+            _qrScannerService.FrameCaptured += OnFrameCaptured;
+            _qrScannerService.LoadAvailableCameras();
             StartStreamCommand = new ViewModelCommand(ExecuteStartStream, CanExecuteStartStream);
             StopStreamCommand = new ViewModelCommand(ExecuteStopStream, CanExecuteStopStream);
         }
+
 
         public ObservableCollection<CameraDevice>? AvailableCameras {
-            get => _availableCameras;
-            set => SetProperty(ref _availableCameras, value);
-        }
-
-        public CameraDevice? SelectedCamera {
-            get => _selectedCamera;
+            get => _qrScannerService.AvailableCameras;
             set
             {
-                if (SetProperty(ref _selectedCamera, value))
+                if (_qrScannerService.AvailableCameras != value)
                 {
-                    CommandManager.InvalidateRequerySuggested();
+                    _qrScannerService.AvailableCameras = value;
+                    OnPropertyChanged(nameof(AvailableCameras));
                 }
             }
         }
-        public bool IsStreaming {
-            get => _isStreaming;
+
+        public CameraDevice? SelectedCamera {
+            get => _qrScannerService.SelectedCamera;
             set
             {
-                if (SetProperty(ref _isStreaming, value))
+                if (_qrScannerService.SelectedCamera != value)
                 {
-                    CommandManager.InvalidateRequerySuggested();
+                    _qrScannerService.SelectedCamera = value;
+                    OnPropertyChanged(nameof(SelectedCamera));
+                }
+            }
+        }
+
+        public bool IsStreaming {
+            get => _qrScannerService.IsStreaming;
+            set
+            {
+                if (_qrScannerService.IsStreaming != value)
+                {
+                    _qrScannerService.IsStreaming = value;
+                    OnPropertyChanged(nameof(IsStreaming)); 
                 }
             }
         }
@@ -86,146 +95,48 @@ namespace WpfApp4.ViewModels
         public ICommand StartStreamCommand { get; }
         public ICommand StopStreamCommand { get; }
 
-        private void LoadAvailableCameras()
-        {
-            AvailableCameras = new ObservableCollection<CameraDevice>();
-            var cameras = DsDevice.GetDevicesOfCat(FilterCategory.VideoInputDevice);
 
-            for (int i = 0; i < cameras.Length; i++)
-            {
-                //AvailableCameras.Add(new CameraDevice
-                //{
-                //    CameraName = cameras[i].Name.ToString(),
-                //    CameraIndex = i,
-                //});
-                using (var capture = new VideoCapture(i))
-                {
-                    if (capture.IsOpened())
-                    {
-                        int width = (int)capture.Get(OpenCvSharp.VideoCaptureProperties.FrameWidth);
-                        int height = (int)capture.Get(OpenCvSharp.VideoCaptureProperties.FrameHeight);
-
-                        AvailableCameras.Add(new CameraDevice
-                        {
-                            CameraName = cameras[i].Name,
-                            CameraIndex = i,
-                            CameraWidth = width,
-                            CameraHeight = height
-                        });
-                    }
-                }
-            }
-        }
 
         private bool CanExecuteStartStream(object? parameter)
         {
-            return SelectedCamera != null && !_isStreaming;
+            return SelectedCamera != null && !IsStreaming;
         }
 
         private bool CanExecuteStopStream(object? parameter)
         {
-            return _isStreaming;
+            return !IsStreaming;
         }
 
 
-        private async void ExecuteStartStream(object? parameter)
+        private void ExecuteStartStream(object? parameter)
         {
             if (SelectedCamera == null) return;
 
             try
             {
-                _videoCapture = new VideoCapture(SelectedCamera.CameraIndex);
-                if (!_videoCapture.IsOpened())
-                {
-                    MessageBox.Show("Failed to open camera");
-                    return;
-                }
-                _isStreaming = true;
+                _qrScannerService.StartCamera(SelectedCamera.CameraIndex);
                 CommandManager.InvalidateRequerySuggested();
-
-                await Task.Run(() => ProcessCameraStream());
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error starting camera: {ex.Message}");
-                _isStreaming = false;
-                CommandManager.InvalidateRequerySuggested();
             }
         }
 
         private void ExecuteStopStream(object? parameter)
         {
-            if (_videoCapture != null)
-            {
-                _isStreaming = false;
-                _videoCapture.Dispose();
-                _videoCapture = null;
-                CommandManager.InvalidateRequerySuggested();
-            }
+            _qrScannerService.StopCamera();
+            CommandManager.InvalidateRequerySuggested();
         }
-
-
-        private async Task ProcessCameraStream()
+        private void OnQRCodeDetected(object? sender, string qrCodeData)
         {
-            var qrCodeDectector = new QRCodeDetector();
-            while (_isStreaming)
-            {
-                if (_isProcessing)
-                    continue;
-
-                _isProcessing = true;
-
-                try
-                {
-                    using var frame = new Mat();
-                    _videoCapture?.Read(frame);
-
-                    if (frame.Empty())
-                        continue;
-
-                    /// Detect and decode 
-                    Point2f[] points;
-                    string qrCodeData = qrCodeDectector.DetectAndDecode(frame, out points);
-                    if (!string.IsNullOrEmpty(qrCodeData))
-                    {
-                        QRCodeContent = qrCodeData;
-                    }
-                    /// Draw the bounding box on the frame
-                    if (points.Length == 4)
-                    {
-                        // Draw bounding box around QR code
-                        for (int i = 0; i < points.Length; i++)
-                        {
-                            var pt1 = points[i];
-                            var pt2 = points[(i + 1) % points.Length]; // Connect the last point with the first
-                            var pt1Int = new OpenCvSharp.Point((int)pt1.X, (int)pt1.Y);
-                            var pt2Int = new OpenCvSharp.Point((int)pt2.X, (int)pt2.Y);
-                            Cv2.Line(frame, pt1Int, pt2Int, new Scalar(255, 0, 0), 3); // Draw red lines
-                        }
-                    }
-
-
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        CurrentFrame = frame.ToBitmapSource();
-                    });
-                }
-                catch (Exception ex)
-                {
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        MessageBox.Show($"Error processing frame: {ex.Message}");
-                    });
-                    break;
-                }
-                finally
-                {
-                    _isProcessing = false;
-                }
-
-                await Task.Delay(30); // Limit frame rate
-            }
+            QRCodeContent = qrCodeData;
         }
+        private void OnFrameCaptured(object? sender, BitmapSource frame)
+        {
+            CurrentFrame = frame;
+        }
+
     }
 }
 

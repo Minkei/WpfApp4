@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,6 +30,15 @@ namespace WpfApp4.Views
         {
             InitializeComponent();
             StartClock();
+            this.DataContext = new QRScannerViewModel(new Services.QRScannerService());
+            if (this.DataContext is QRScannerViewModel viewModel)
+            {
+                Debug.WriteLine("DataContext is set correctly: " + viewModel.IsStreaming);
+            }
+            else
+            {
+                Debug.WriteLine("DataContext is NOT set correctly.");
+            }
         }
 
         private void StartClock()

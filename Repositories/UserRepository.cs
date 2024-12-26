@@ -77,7 +77,7 @@ namespace WpfApp4.Repositories
                     }
                 }
             }
-            return user ?? null;
+            return user ?? new UserModel();
         }
 
         public void Remove(UserModel userModel)
