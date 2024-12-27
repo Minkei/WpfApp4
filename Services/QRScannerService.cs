@@ -211,11 +211,11 @@ namespace WpfApp4.Services
         private CancellationTokenSource? _cancellationTokenSource;
         private bool _isStreaming;
         private bool _isProcessing;
+        private string? _cameraOverview;
         private CameraDevice? _selectedCamera;
         private ObservableCollection<CameraDevice>? _availableCameras;
 
- 
-
+        // Properties
         public bool IsStreaming {
             get => _isStreaming;
             set
@@ -231,16 +231,22 @@ namespace WpfApp4.Services
             get => _availableCameras;
             set => SetProperty(ref _availableCameras, value);
         }
-
         public CameraDevice? SelectedCamera {
             get => _selectedCamera;
             set => SetProperty(ref _selectedCamera, value);
         }
+        public string? CameraOverview {
+            get => _cameraOverview;
+            set => SetProperty(ref _cameraOverview, value);
+        }
 
+        //Events
         public event EventHandler<string>? QRCodeDetected;
         public event EventHandler<BitmapSource>? FrameCaptured;
         public event EventHandler<string>? StreamingStatusChanged;
+        public event EventHandler<string>? CameraOverviewChanged;
 
+        // Methods
         public void LoadAvailableCameras()
         {
             AvailableCameras = new ObservableCollection<CameraDevice>();
@@ -254,15 +260,19 @@ namespace WpfApp4.Services
                     {
                         if (capture.IsOpened())
                         {
-                            var width = (int)capture.Get(OpenCvSharp.VideoCaptureProperties.FrameWidth);
-                            var height = (int)capture.Get(OpenCvSharp.VideoCaptureProperties.FrameHeight);
+                            var camera_name = camera.value.Name;
+                            var camera_index = camera.index;
+                            var camera_width = (int)capture.Get(OpenCvSharp.VideoCaptureProperties.FrameWidth);
+                            var camera_height = (int)capture.Get(OpenCvSharp.VideoCaptureProperties.FrameHeight);
+                            var camera_fps = (int)capture.Get(OpenCvSharp.VideoCaptureProperties.Fps);
+
                             AvailableCameras.Add(new CameraDevice
                             {
-                                CameraName = camera.value.Name,
-                                CameraIndex = camera.index,
-                                CameraWidth = width,
-                                CameraHeight = height
-
+                                CameraName = camera_name,
+                                CameraIndex = camera_index,
+                                CameraWidth = camera_width,
+                                CameraHeight = camera_height,
+                                CameraOverview = $"via by {camera_name} {camera_width}x{camera_height} {camera_fps}fps"
                             });
                         }
                     }
@@ -273,7 +283,6 @@ namespace WpfApp4.Services
                 }
             }
         }
-
         public void StartCamera(int cameraIndex)
         {
             if (IsStreaming) return;
@@ -289,24 +298,25 @@ namespace WpfApp4.Services
 
             IsStreaming = true;
             StreamingStatusChanged?.Invoke(this, "Streaming");
+            CameraOverviewChanged?.Invoke(this, SelectedCamera?.CameraOverview ?? "Unknown");
+
             Application.Current.Dispatcher.Invoke(() => OnPropertyChanged(nameof(IsStreaming)));
 
             Task.Run(() => ProcessCameraStream(token), token);
         }
-
         public void StopCamera()
         {
             if (!IsStreaming) return;
 
             IsStreaming = false;
             StreamingStatusChanged?.Invoke(this, "Stopped");
+            CameraOverviewChanged?.Invoke(this, "Unknown");
             Application.Current.Dispatcher.Invoke(() => OnPropertyChanged(nameof(IsStreaming)));
 
             _cancellationTokenSource?.Cancel();
             _videoCapture?.Release();
             _videoCapture = null;
         }
-
         private async Task ProcessCameraStream(CancellationToken token)
         {
             var qrCodeDetector = new QRCodeDetector();
@@ -362,18 +372,6 @@ namespace WpfApp4.Services
 
                 // Control frame rate (adjust delay for performance)
                 await Task.Delay(30, token).ConfigureAwait(false); // Adjust as needed for smooth performance
-            }
-        }
-
-        // AutoStart function
-        public void AutoStart()
-        {
-            if (AvailableCameras == null || !AvailableCameras.Any() || SelectedCamera == null) return;
-
-            var camera = AvailableCameras.FirstOrDefault(c => c.CameraIndex == SelectedCamera.CameraIndex);
-            if (camera != null)
-            {
-                StartCamera(camera.CameraIndex);
             }
         }
     }

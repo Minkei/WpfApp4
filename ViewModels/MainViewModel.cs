@@ -16,13 +16,14 @@ using WpfApp4.Views;
 
 namespace WpfApp4.ViewModels
 {
-    public class MainViewModel:ViewModelBase
+    public class MainViewModel : ViewModelBase
     {
         //Fields
         public readonly QRScannerService _qrScannerService = new();
         private string _qrCodeContent = string.Empty;
         private BitmapSource? _currentFrame;
         private string _streamingStatus = String.Empty;
+        private string _cameraOverview = string.Empty;
         public CameraDevice? _selectedCamera;
         public ObservableCollection<CameraDevice>? _availableCameras;
         private UserAccountModel? _currentUserAccount;
@@ -38,8 +39,7 @@ namespace WpfApp4.ViewModels
         private bool _isSupportViewVisible = false;
 
         //Properties
-        public string QRCodeContent  
-        {
+        public string QRCodeContent {
             get => _qrCodeContent;
             set => SetProperty(ref _qrCodeContent, value);
         }
@@ -47,10 +47,9 @@ namespace WpfApp4.ViewModels
             get => _currentFrame;
             set => SetProperty(ref _currentFrame, value);
         }
-        public UserAccountModel? CurrentUserAccount
-        {
-            get { return _currentUserAccount; } 
-            set { _currentUserAccount = value; OnPropertyChanged(nameof(CurrentUserAccount)); } 
+        public UserAccountModel? CurrentUserAccount {
+            get { return _currentUserAccount; }
+            set { _currentUserAccount = value; OnPropertyChanged(nameof(CurrentUserAccount)); }
         }
         public ViewModelBase? CurrentChildView { get => _currentChildView; set { _currentChildView = value; OnPropertyChanged(nameof(CurrentChildView)); } }
         public string? Caption { get => _caption; set { _caption = value; OnPropertyChanged(nameof(Caption)); } }
@@ -88,6 +87,17 @@ namespace WpfApp4.ViewModels
                 }
             }
         }
+        public string? CameraOverview {
+            get => _qrScannerService.CameraOverview;
+            set
+            {
+                if (_qrScannerService.CameraOverview != value)
+                {
+                    _qrScannerService.CameraOverview = value;
+                    OnPropertyChanged(nameof(CameraOverview));
+                }
+            }
+        }
         public string StreamingStatus {
             get => _streamingStatus;
             set
@@ -107,8 +117,7 @@ namespace WpfApp4.ViewModels
                 }
             }
         }
-        public bool IsQRScannerViewVisible
-        {
+        public bool IsQRScannerViewVisible {
             get { return _isQRScannerViewVisible; }
             set { _isQRScannerViewVisible = value; OnPropertyChanged(nameof(IsQRScannerViewVisible)); }
         }
@@ -132,9 +141,9 @@ namespace WpfApp4.ViewModels
 
         //Commands
         public ICommand ShowQRScannerView { get; }
-        public ICommand ShowDataView { get; }  
+        public ICommand ShowDataView { get; }
         public ICommand ShowReportView { get; }
-        public ICommand ShowSettingView { get; }    
+        public ICommand ShowSettingView { get; }
         public ICommand ShowSupportView { get; }
         public ICommand StartStreamCommand { get; }
         public ICommand StopStreamCommand { get; }
@@ -163,6 +172,7 @@ namespace WpfApp4.ViewModels
             _qrScannerService.QRCodeDetected += OnQRCodeDetected;
             _qrScannerService.FrameCaptured += OnFrameCaptured;
             _qrScannerService.StreamingStatusChanged += OnStreamingStatusChanged;
+            _qrScannerService.CameraOverviewChanged += CameraOverviewChanged;
 
             //Commands
             StartStreamCommand = new ViewModelCommand(ExecuteStartStream, CanExecuteStartStream);
@@ -292,6 +302,9 @@ namespace WpfApp4.ViewModels
         {
             StreamingStatus = status;
         }
-
+        private void CameraOverviewChanged(object? sender, string cameraOverview)
+        {
+            CameraOverview = cameraOverview;
+        }
     }
 }

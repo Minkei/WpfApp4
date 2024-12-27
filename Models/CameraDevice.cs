@@ -12,6 +12,6 @@ namespace WpfApp4.Models
         public int CameraIndex { get; set; }
         public int CameraWidth { get; set; }
         public int CameraHeight { get; set; }
-        //public string? CameraOverview { get; set }
+        public string? CameraOverview { get; set; }
     }
 }
