@@ -13,7 +13,7 @@ using WpfApp4.Repositories;
 
 namespace WpfApp4.Repositories
 {
-    public class UserRepository : RepositoryBase, IUserRepository
+    public class UserRepository :  LoginRepositoryBase, IUserRepository
     {
         public void Add(UserModel userModel)
         {

@@ -7,12 +7,12 @@ using Microsoft.Data.SqlClient;
 
 namespace WpfApp4.Repositories
 {
-    public abstract class RepositoryBase
+    public abstract class QRCodeRepositoryBase
     {
         private readonly string _connectionString;
-        public RepositoryBase()
+        public QRCodeRepositoryBase()
         {
-            _connectionString = "Server=(local); Database=MVVMLoginDB; Integrated Security=true; Encrypt = True; TrustServerCertificate = True";
+            _connectionString = "Server=(local); Database=QRCodeDB; Integrated Security=true; Encrypt = True; TrustServerCertificate = True";
         }
         protected SqlConnection GetConnection()
         {

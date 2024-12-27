@@ -415,7 +415,77 @@
                                 Background="#200F53"
                                 Margin="0,5,5,0"
                                 Padding="10">
-                            <DataGrid ColumnWidth="*" Background="#200F53" BorderThickness="0">
+                            <DataGrid ColumnWidth="*"
+                                      ItemsSource="{Binding QRCodeList}"
+                                      AutoGenerateColumns="False"
+                                      CanUserAddRows="False"
+                                      CanUserResizeColumns="True"
+                                      HeadersVisibility="Column"
+                                      CanUserDeleteRows="False"
+                                      Background="Transparent"
+                                      BorderBrush="Transparent"
+                                      GridLinesVisibility="None"
+                                      IsReadOnly="True"
+                                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                                      SelectionMode="Extended"
+                                      SelectionUnit="CellOrRowHeader"
+                                      >
+
+                                <DataGrid.RowStyle>
+                                    <Style TargetType="DataGridRow">
+                                        <Setter Property="Background" Value="Transparent"/>
+                                        <Setter Property="BorderBrush" Value="{StaticResource color3}"/>
+                                        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                                        <Setter Property="Foreground" Value="{StaticResource titleColor2}"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                        <Setter Property="Height" Value="80"/>
+                                    </Style>
+                                </DataGrid.RowStyle>
+
+                                <DataGrid.CellStyle>
+                                    <Style TargetType="DataGridCell">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                        <Setter Property="TextBlock.TextDecorations" Value="None"/>
+                                        <Setter Property="BorderBrush" Value="Transparent"/>
+                                    </Style>
+                                </DataGrid.CellStyle>
+
+                                <DataGrid.ColumnHeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="Background" Value="Transparent"/>
+                                        <Setter Property="Foreground" Value="{StaticResource titleColor1}"/>
+                                        <Setter Property="FontFamily" Value="Montserrat"/>
+                                        <Setter Property="FontSize" Value="15"/>
+                                        <Setter Property="Padding" Value="10"/>
+                                        <Setter Property="FontWeight" Value="Bold"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                        <Setter Property="BorderBrush" Value="Transparent"/>
+                                    </Style>
+                                </DataGrid.ColumnHeaderStyle>
+
+                                
+
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding QRCodeValue}" Header="QR Code" FontSize="14" />
+                                    <DataGridTextColumn Binding="{Binding ScanDate.Date, StringFormat='dd/MM/yyyy'}" Header="Date" FontSize="14"/>
+                                    <DataGridTextColumn Binding="{Binding ScanTime}" Header="Time" FontSize="14"/>
+                                    <DataGridTextColumn Binding="{Binding PIC}" Header="PIC" FontSize="14"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <!--<DataGrid ColumnWidth="*"
+                                      Background="#200F53"
+                                      BorderThickness="0"
+                                      ItemsSource="{Binding QRCodeList}"
+                                      AutoGenerateColumns="False"
+                                      HeadersVisibility="Column"
+                                      CanUserAddRows="False"
+                                      CanUserDeleteRows="False"
+                                      IsReadOnly="True" 
+                                      SelectionMode="Extended"
+                                      GridLinesVisibility="Horizontal"
+                                      SelectionUnit="Cell">
                                 <DataGrid.ColumnHeaderStyle>
                                     <Style TargetType="DataGridColumnHeader">
                                         <Setter Property="Background" Value="Transparent"/>
@@ -423,17 +493,44 @@
                                         <Setter Property="Padding" Value="10,0,0,10"/>
                                         <Setter Property="FontFamily" Value="Montserrat"/>
                                         <Setter Property="FontSize" Value="15"/>
-                                        <Setter Property="FontWeight" Value="Medium"/>
+                                        <Setter Property="FontWeight" Value="DemiBold"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
                                     </Style>
                                 </DataGrid.ColumnHeaderStyle>
+                                
+                                <DataGrid.CellStyle>
+                                    <Style TargetType="DataGridCell">
+                                        <Setter Property="BorderThickness" Value="0"/>
+                                        <Setter Property="Padding" Value="2"/>
+                                        <Setter Property="Background" Value="Transparent" />
+                                        <Setter Property="Foreground" Value="{StaticResource titleColor3}"/>
+                                        <Setter Property="BorderThickness" Value="5"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGrid.CellStyle>
+
+                                <DataGrid.RowStyle>
+                                    <Style TargetType="DataGridRow">
+                                        <Setter Property="Background" Value="Transparent"/>
+                                        <Setter Property="BorderThickness" Value="0"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                        
+                                    </Style>
+                                </DataGrid.RowStyle>
+
+
+
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="No."/>
-                                    <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="QR Code"/>
-                                    <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Date"/>
-                                    <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Time"/>
-                                    <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="PIC"/>
+                                    <DataGridTextColumn Binding="{Binding QRCodeValue}" Header="QR Code" />
+                                    <DataGridTextColumn Binding="{Binding ScanDate.Date}" Header="Date" />
+                                    <DataGridTextColumn Binding="{Binding ScanTime}" Header="Time" />
+                                    <DataGridTextColumn Binding="{Binding PIC}" Header="PIC" />
                                 </DataGrid.Columns>
-                            </DataGrid>
+                            </DataGrid>-->
+
                         </Border>
 
                         <!--Block QR Scanning-->

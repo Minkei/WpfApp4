@@ -9,6 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Audio\public-domain-beep-sound-100267.mp3" />
+    <None Remove="Audio\public-domain-beep-sound-100267.wav" />
+    <None Remove="Audio\short-beep-tone-47916.wav" />
     <None Remove="Images\back-image.jpg" />
     <None Remove="Images\dashboard-template-1024x589.png" />
     <None Remove="Images\etek-logo.png" />
@@ -19,6 +22,15 @@
     <None Remove="Images\profile-icon.jpg" />
     <None Remove="Images\qr-code.jpg" />
     <None Remove="Images\user-icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Audio\public-domain-beep-sound-100267.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Audio\short-beep-tone-47916.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -46,6 +58,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Audio\public-domain-beep-sound-100267.mp3" />
     <Resource Include="Images\back-image.jpg" />
     <Resource Include="Images\dashboard-template-1024x589.png" />
     <Resource Include="Images\etek-logo.png" />

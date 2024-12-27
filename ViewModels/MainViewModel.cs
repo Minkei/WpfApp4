@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Media;
 using System.Text;
 using System.Threading; 
 using System.Threading.Tasks;
@@ -21,13 +22,16 @@ namespace WpfApp4.ViewModels
         //Fields
         public readonly QRScannerService _qrScannerService = new();
         private string _qrCodeContent = string.Empty;
+        private string _lastQrCodeContent = string.Empty;
         private BitmapSource? _currentFrame;
         private string _streamingStatus = String.Empty;
         private string _cameraOverview = string.Empty;
         public CameraDevice? _selectedCamera;
-        public ObservableCollection<CameraDevice>? _availableCameras;
+        //public ObservableCollection<CameraDevice>? _availableCameras;
+        public ObservableCollection<QRCodeModel>? _qrCodeList = new ObservableCollection<QRCodeModel>();
         private UserAccountModel? _currentUserAccount;
         private IUserRepository userRepository;
+        private QRCodeRepository _qrCodeRepository;
         private ViewModelBase? _currentChildView;
         private string? _caption;
         private IconChar _icon;
@@ -65,6 +69,10 @@ namespace WpfApp4.ViewModels
                 }
             }
         }
+        public ObservableCollection<QRCodeModel>? QRCodeList {
+            get => _qrCodeList;
+            set => SetProperty(ref _qrCodeList, value);
+        }
         public CameraDevice? SelectedCamera {
             get => _qrScannerService.SelectedCamera;
             set
@@ -98,6 +106,10 @@ namespace WpfApp4.ViewModels
                 }
             }
         }
+
+        
+
+
         public string StreamingStatus {
             get => _streamingStatus;
             set
@@ -154,6 +166,7 @@ namespace WpfApp4.ViewModels
         {
             //Initialize
             _qrScannerViewModel = new QRScannerViewModel();
+            _qrCodeRepository = new QRCodeRepository();
             userRepository = new UserRepository();
             CurrentUserAccount = new UserAccountModel();
             _qrScannerService = new QRScannerService();
@@ -288,11 +301,51 @@ namespace WpfApp4.ViewModels
             _qrScannerService.StopCamera();
             CommandManager.InvalidateRequerySuggested();
         }
+        private void PlaySoundQRCodeDetected()
+        {
+            try
+            {
+                string soundPath = "Audio/short-beep-tone-47916.wav";
+                if (System.IO.File.Exists(soundPath))
+                {
+                    using var player = new SoundPlayer(soundPath);
+                    player.Play();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error playing system sound: {ex.Message}");
+            }
+        }
+
 
         //Events
-        private void OnQRCodeDetected(object? sender, string qrCodeData)
+        private async void OnQRCodeDetected(object? sender, string qrCodeData)
         {
-            QRCodeContent = qrCodeData;
+            if (qrCodeData != _lastQrCodeContent)
+            {
+                PlaySoundQRCodeDetected();
+                _lastQrCodeContent = qrCodeData;
+                //Display the QR Code content 
+                QRCodeContent = qrCodeData;
+
+                //Save the QR Code content
+                var qrCodeModel = new QRCodeModel()
+                {
+                    QRCodeValue = qrCodeData,
+                    ScanDate = DateTime.Now.Date,
+                    ScanTime = DateTime.Now.TimeOfDay,
+                    PIC = CurrentUserAccount?.DisplayName
+                };
+
+                await _qrCodeRepository.AddQRCodeAsync(qrCodeModel);
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    QRCodeList.Add(qrCodeModel);
+                });
+            }
+
+            
         }
         private void OnFrameCaptured(object? sender, BitmapSource frame)
         {
