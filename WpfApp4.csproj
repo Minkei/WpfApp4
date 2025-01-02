@@ -37,6 +37,7 @@
   <ItemGroup>
     <PackageReference Include="Ding.QRCode.ZXing" Version="1.1.8" />
     <PackageReference Include="DirectShowLib" Version="1.0.0" />
+    <PackageReference Include="EPPlus" Version="7.5.2" />
     <PackageReference Include="FontAwesome.Sharp" Version="6.6.0" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />

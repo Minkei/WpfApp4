@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using WpfApp4.Helper;
 using WpfApp4.Models;
 using WpfApp4.Repositories;
 using WpfApp4.Services;
@@ -209,6 +210,9 @@ namespace WpfApp4.ViewModels
 			StartStreamCommand = new ViewModelCommand(ExecuteStartStream, CanExecuteStartStream);
 			StopStreamCommand = new ViewModelCommand(ExecuteStopStream, CanExecuteStopStream);
             ToggleSilentModeCommand = new ViewModelCommand(ExecuteSilentModeCommand);
+
+            //Helper
+            Mediator.Register("CurrentUserAccount", CurrentUserAccount);
 
         }
 

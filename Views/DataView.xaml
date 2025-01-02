@@ -232,15 +232,9 @@
                         Command="{Binding LoadDataCommand}">
                 </Button>
 
-                <Button Style="{StaticResource ExportButtonStyle}">
-                    
+                <Button Style="{StaticResource ExportButtonStyle}"
+                        Command="{Binding ExportFileCommand}">
                 </Button>
-
-                <Button Style="{StaticResource SendEmailButtonStyle}">
-
-                </Button>
-
-
             </StackPanel>
         </Grid>
 

@@ -8,6 +8,11 @@ using WpfApp4.Models;
 using WpfApp4.Repositories;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using Microsoft.Win32;
+using OfficeOpenXml;
+using System.IO;
+using System.Windows;
+using WpfApp4.Helper;
 
 namespace WpfApp4.ViewModels
 {
@@ -17,6 +22,7 @@ namespace WpfApp4.ViewModels
         private readonly QRCodeRepository? _qrCodeRepository;
         private ObservableCollection<QRCodeModel>? _qrCodeListFromSQL;
         private ObservableCollection<QRCodeModel>? _qrCodeListFromSQLFiltered;
+        private string? _currentUserAccountDisplayName;
         private bool _isLoading;
         private string? _searchText = string.Empty;
         private bool _isFiltered;
@@ -137,6 +143,7 @@ namespace WpfApp4.ViewModels
         public ICommand SearchCommand { get; }
         public ICommand ApplyFilterCommand { get; }
         public ICommand ResetFilterCommand { get; }
+        public ICommand ExportFileCommand { get; }
 
         //Constructor
         public DataViewModel()
@@ -150,8 +157,101 @@ namespace WpfApp4.ViewModels
             ShowFilterPopUpCommand = new ViewModelCommand(_ => ToggleFilterPopup());
             ApplyFilterCommand = new ViewModelCommand(_ => ApplyFilter());
             ResetFilterCommand = new ViewModelCommand(_ => ResetFilter());
+            ExportFileCommand = new ViewModelCommand(_ => ExportData());
 
         }
+        //Methods
+        public string GetCurrentUserAccountDisplayName()
+        {
+            var UserAccountModel = Mediator.Get<UserAccountModel>("CurrentUserAccount");
+            return UserAccountModel?.DisplayName ?? "Default User";
+        }
+        private void ExportData()
+        {
+            try
+            {
+                // Get the current date and time to create the file name
+                string dateTime = DateTime.Now.ToString("yyyy.MM.dd_HH.mm.ss");
+                string currentUser = GetCurrentUserAccountDisplayName();
+
+                // Create the file name following the format [QRCodeData] [Date] [Time] [PIC]
+                string fileName = $"QRCodeData_{dateTime}_{currentUser}.xlsx";
+
+                // Show the SaveFileDialog to allow the user to choose the file path and name
+                var saveFileDialog = new SaveFileDialog
+                {
+                    Filter = "Excel Files (*.xlsx)|*.xlsx",
+                    FileName = fileName
+                };
+
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    string filePath = saveFileDialog.FileName;
+
+                    ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+                    // Use "using" to ensure the resource is disposed properly
+                    using (var package = new ExcelPackage())
+                    {
+                        var worksheet = package.Workbook.Worksheets.Add("QRCodeData");
+
+                        // Add headers for the columns
+                        worksheet.Cells[1, 1].Value = "RowNumber";
+                        worksheet.Cells[1, 2].Value = "QRCodeValue";
+                        worksheet.Cells[1, 3].Value = "ScanDate";
+                        worksheet.Cells[1, 4].Value = "ScanTime";
+                        worksheet.Cells[1, 5].Value = "PIC";
+
+                        // Apply header styles
+                        using (var range = worksheet.Cells[1, 1, 1, 5])
+                        {
+                            range.Style.Font.Bold = true;
+                            range.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                            range.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
+                            range.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                        }
+
+                        // Loop through the QRCodeList to add data to the Excel file
+                        int row = 2; // Start from the second row after the header
+                        foreach (var qrCode in QRCodeListFromSQLFiltered)
+                        {
+                            worksheet.Cells[row, 1].Value = qrCode.RowNumber;
+                            worksheet.Cells[row, 2].Value = qrCode.QRCodeValue;
+
+                            // Format ScanDate as yyyy-MM-dd
+                            worksheet.Cells[row, 3].Value = qrCode.ScanDate;
+                            worksheet.Cells[row, 3].Style.Numberformat.Format = "yyyy-MM-dd";
+
+                            // Format ScanTime as HH:mm:ss
+                            worksheet.Cells[row, 4].Value = qrCode.ScanTime;
+                            worksheet.Cells[row, 4].Style.Numberformat.Format = "HH:mm:ss";
+
+                            worksheet.Cells[row, 5].Value = qrCode.PIC;
+
+                            row++;
+                        }
+
+                        // Auto-fit all columns
+                        worksheet.Cells.AutoFitColumns();
+
+                        // Save the Excel file
+                        var fi = new FileInfo(filePath);
+                        package.SaveAs(fi);
+
+                        // Show a success message after export
+                        MessageBox.Show("Data exported successfully to Excel!", "Export", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle errors during the export process
+                MessageBox.Show($"Error exporting data: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+
+
         public void ToggleFilterPopup()
         {
             ISFilterPopUpOpen = !ISFilterPopUpOpen;
