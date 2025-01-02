@@ -21,6 +21,7 @@
     <None Remove="Images\LOGO_IMAS-Model-removebg.png" />
     <None Remove="Images\profile-icon.jpg" />
     <None Remove="Images\qr-code.jpg" />
+    <None Remove="Images\QRScannerIcon.ico" />
     <None Remove="Images\user-icon.png" />
   </ItemGroup>
 
@@ -68,6 +69,7 @@
     <Resource Include="Images\LOGO_IMAS-Model-removebg.png" />
     <Resource Include="Images\profile-icon.jpg" />
     <Resource Include="Images\qr-code.jpg" />
+    <Resource Include="Images\QRScannerIcon.ico" />
     <Resource Include="Images\user-icon.png" />
   </ItemGroup>
 

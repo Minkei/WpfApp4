@@ -15,6 +15,7 @@ using WpfApp4.ViewModels;
 using System.Windows;
 using System.Threading;
 using System.Media;
+using System.Windows.Documents;
 
 namespace WpfApp4.Services
 {
@@ -32,14 +33,7 @@ namespace WpfApp4.Services
         // Properties
         public bool IsStreaming {
             get => _isStreaming;
-            set
-            {
-                if (_isStreaming != value)
-                {
-                    _isStreaming = value;
-                    OnPropertyChanged(nameof(IsStreaming));
-                }
-            }
+            set => SetProperty(ref _isStreaming, value);
         }
         public ObservableCollection<CameraDevice>? AvailableCameras {
             get => _availableCameras;
@@ -57,7 +51,8 @@ namespace WpfApp4.Services
         //Events
         public event EventHandler<string>? QRCodeDetected;
         public event EventHandler<BitmapSource>? FrameCaptured;
-        public event EventHandler<string>? StreamingStatusChanged;
+        public event EventHandler<string>? StreamingStatusStringChanged;
+        public event EventHandler<bool>? StreamingStatusBoolChanged;
         public event EventHandler<string>? CameraOverviewChanged;
 
         // Methods
@@ -111,10 +106,10 @@ namespace WpfApp4.Services
             }
 
             IsStreaming = true;
-            StreamingStatusChanged?.Invoke(this, "Streaming");
+            StreamingStatusStringChanged?.Invoke(this, "Streaming");
+            StreamingStatusBoolChanged?.Invoke(this, IsStreaming);
             CameraOverviewChanged?.Invoke(this, SelectedCamera?.CameraOverview ?? "Unknown");
 
-            Application.Current.Dispatcher.Invoke(() => OnPropertyChanged(nameof(IsStreaming)));
 
             Task.Run(() => ProcessCameraStream(token), token);
         }
@@ -123,9 +118,9 @@ namespace WpfApp4.Services
             if (!IsStreaming) return;
 
             IsStreaming = false;
-            StreamingStatusChanged?.Invoke(this, "Stopped");
+            StreamingStatusStringChanged?.Invoke(this, "Stopped");
+            StreamingStatusBoolChanged?.Invoke(this, IsStreaming);
             CameraOverviewChanged?.Invoke(this, "Unknown");
-            Application.Current.Dispatcher.Invoke(() => OnPropertyChanged(nameof(IsStreaming)));
 
             _cancellationTokenSource?.Cancel();
             _videoCapture?.Release();

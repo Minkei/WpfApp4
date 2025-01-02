@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WpfApp4.ViewModels;
 
 namespace WpfApp4.CustomControls
 {
@@ -36,6 +37,19 @@ namespace WpfApp4.CustomControls
         private void OnPasswordChanged(object sender, RoutedEventArgs e)
         {
             Password = txPassword.SecurePassword;
+        }
+
+        private void txPassword_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Enter)
+            {
+                if(DataContext is LoginViewModel viewModel && viewModel.LoginCommand.CanExecute(null))
+                {
+                    Password = txPassword.SecurePassword;
+                    viewModel.LoginCommand.Execute(null);
+                }
+
+            }
         }
     }
 }

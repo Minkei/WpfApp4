@@ -152,46 +152,41 @@
                         <Image Source="/Images/LOGO_IMAS-Model-removebg.png" Width="166" Height="88"/>
                         <!--<TextBlock Text="IMAS JSC" Foreground="DeepSkyBlue" FontSize="25" FontWeight="Medium" FontFamily="Montserrat" HorizontalAlignment="Center"/>-->
                         <TextBlock Text="IMAS Industrial machines and solutions joint stock company" Foreground="DeepSkyBlue" FontSize="11" FontWeight="Medium" FontFamily="Montserrat" TextAlignment="Center" TextWrapping="Wrap" Margin="0,5,0,0" FontStyle="Italic"/>
-                        <TextBlock Text="User name" Foreground="DarkGray" FontSize="12" FontWeight="Medium" FontFamily="Montserrat" Margin="0,100,0,0"/>
-                        <TextBox x:Name="txUser" FontSize="13"
-                                 Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
-                                 FontWeight="Medium" 
-                                 FontFamily="Montserrat" 
-                                 Foreground="White"
-                                 CaretBrush="LightGray"
-                                 BorderBrush="DarkGray"
-                                 BorderThickness="0,0,0,1"
-                                 Height="28"
-                                 VerticalAlignment="Center"
-                                 VerticalContentAlignment="Center"
-                                 Margin="0,5,0,0"
-                                 Padding="20,0,0,0">
-                            <TextBox.Background>
-                                <ImageBrush ImageSource="/Images/user-icon.png" Stretch="None" AlignmentX="Left" AlignmentY="Center"/>
-                            </TextBox.Background>
-                        </TextBox>
-                        <TextBlock Text="Password" Foreground="DarkGray" FontSize="12" FontWeight="Medium" FontFamily="Montserrat" Margin="0,15,0,0"/>
-                        <!--<PasswordBox x:Name="txPass" FontSize="13"
-                                     FontWeight="Medium" 
-                                     FontFamily="Montserrat" 
-                                     Foreground="White"
-                                     CaretBrush="LightGray"
-                                     BorderBrush="DarkGray"
-                                     BorderThickness="0,0,0,1"
-                                     Height="28"
-                                     VerticalAlignment="Center"
-                                     VerticalContentAlignment="Center"
-                                     Margin="0,5,0,0"
-                                     Padding="20,0,0,0">
-                            <PasswordBox.Background>
-                                <ImageBrush ImageSource="/Images/key-icon.png" Stretch="None" AlignmentX="Left" AlignmentY="Center"/>
-                            </PasswordBox.Background>
-                        </PasswordBox>-->
+                        <TextBlock Text="User name" Foreground="{StaticResource titleColor1}" FontSize="12" FontWeight="Medium" FontFamily="Montserrat" Margin="0,100,0,0"/>
+
+                        <Border BorderBrush="{StaticResource textBoxBorderColor}" BorderThickness="0,0,0,2">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <fa:IconImage Grid.Column="0" Icon="User" Width="18" Height="18" HorizontalAlignment="Left" Margin="5,0,5,0" Foreground="{StaticResource textBoxTextColor}"/>
+                                <TextBox Grid.Column="1"
+                                         x:Name="txUser" FontSize="13"
+                                         Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
+                                         FontWeight="Medium" 
+                                         FontFamily="Montserrat" 
+                                         Foreground="{StaticResource textBoxTextColor}"
+                                         Background="{StaticResource textBoxBackgroundColor}"
+                                         CaretBrush="{StaticResource textBoxTextColor}"
+                                         BorderBrush="DarkGray"
+                                         BorderThickness="0"
+                                         Height="28"
+                                         VerticalAlignment="Center"
+                                         VerticalContentAlignment="Center"
+                                         Padding="10,0,0,0">
+                                </TextBox>
+                            </Grid>
+                        </Border>
+
+
+                        <TextBlock Text="Password" Foreground="{StaticResource titleColor1}" FontSize="12" FontWeight="Medium" FontFamily="Montserrat" Margin="0,15,0,0"/>
+                       
                         <customcontrols:BindablePasswordBox Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                     Height="28"                            
                                     Margin="0,5,0,0">
                         </customcontrols:BindablePasswordBox>
-                        <TextBlock Text="{Binding ErrorMessage}" Foreground="DarkGray" FontSize="12" FontWeight="Medium" FontFamily="Montserrat" Margin="0,10,0,0" TextWrapping="Wrap"/>
+                        <TextBlock Text="{Binding ErrorMessage}" Foreground="{StaticResource titleBackgroundColor1}" FontSize="12" FontWeight="Medium" FontFamily="Montserrat" Margin="0,10,0,0" TextWrapping="Wrap"/>
                         <Button x:Name="btnLOGIN"
                                 Grid.Column="3"
                                 BorderThickness="0"
@@ -224,8 +219,8 @@
                         <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Center"
                                 Margin="0,15,0,0">
-                            <TextBlock Text="Forgot your password?" Foreground="DarkGray" FontSize="12" FontWeight="Medium" FontFamily="Montserrat"/>
-                            <TextBlock Text="Reset" Foreground="White" FontSize="12" FontWeight="Medium" FontFamily="Montserrat" Cursor="Hand" Margin="8,0,0,0"/>
+                            <TextBlock Text="Forgot your password?" Foreground="{StaticResource titleBackgroundColor1}" FontSize="12" FontWeight="Medium" FontFamily="Montserrat"/>
+                            <TextBlock Text="Reset" Foreground="{StaticResource textBoxBackgroundColor}" FontSize="12" FontWeight="Medium" FontFamily="Montserrat" Cursor="Hand" Margin="8,0,0,0"/>
                         </StackPanel>
                     </StackPanel>
                 </Grid>

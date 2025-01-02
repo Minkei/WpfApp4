@@ -42,5 +42,43 @@ namespace WpfApp4.Repositories
             });
         }
 
+
+        public async Task<List<QRCodeModel>> GetAllQRCodesAsync()
+        {
+            var qrCodeListReadFromSQL = new List<QRCodeModel>();
+
+            try
+            {
+                using (var connection = GetConnection())
+                using (var command = new SqlCommand())
+                {
+                    connection.Open();
+                    command.Connection = connection;
+                    command.CommandText = "SELECT QRCodeValue, ScanDate, ScanTime, PIC FROM QRCodeData";
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            qrCodeListReadFromSQL.Add(new QRCodeModel
+                            {
+                                QRCodeValue = reader["QRCodeValue"].ToString(),
+                                ScanDate = reader.GetDateTime(reader.GetOrdinal("ScanDate")),
+                                ScanTime = (TimeSpan)reader["ScanTime"],
+                                PIC = reader["PIC"].ToString()
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+            }
+
+            return qrCodeListReadFromSQL;
+        }
+
+
     }
 }

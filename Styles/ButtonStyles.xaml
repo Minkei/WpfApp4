@@ -26,7 +26,7 @@
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Margin" Value="0,0,0,5"/>
                 <Setter Property="Background" Value="{StaticResource panelOverColor}"/>
-                <Setter Property="Foreground" Value="{StaticResource titleColor3}"/>
+                <Setter Property="Foreground" Value="{StaticResource titleBackgroundColor1}"/>
                 <Setter Property="BorderBrush" Value="{Binding Path=Tag, RelativeSource={RelativeSource Self}}"/>
             </Trigger>
             <!--Active button back color-->
@@ -41,9 +41,10 @@
     
     <!--Style for Control Bar Button-->
     <Style x:Key="controlButton" TargetType="Button">
-        <Setter Property="Height" Value="25"/>
-        <Setter Property="Width" Value="25"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Width" Value="30"/>
         <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Margin" Value="0,0,10,0"/>
         <Setter Property="Foreground" Value="{StaticResource plainTextColor1}"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -161,6 +162,7 @@
         </Setter>
     </Style>
 
+    <!--Style for Start Button-->
     <Style x:Key="StartButtonStyle" TargetType="Button">
         <!-- Set default properties -->
         <Setter Property="Width" Value="150"/>
@@ -169,7 +171,7 @@
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Margin" Value="30,0,0,0"/>
         <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="Background" Value="#200F53"/>
+        <Setter Property="Background" Value="{StaticResource buttonColor}"/>
 
         <Setter Property="Template">
             <Setter.Value>
@@ -180,16 +182,11 @@
                     <ControlTemplate.Triggers>
                         <!-- Trigger for IsMouseOver -->
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="ButtonBorder" Property="Background" Value="#304FFE"/>
+                            <Setter TargetName="ButtonBorder" Property="Background" Value="{StaticResource buttonHoverColor}"/>
                             <!-- Hover color -->
                         </Trigger>
-                        <!-- Trigger for IsPressed -->
-                        <!--<Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="ButtonBorder" Property="Background" Value="#1A237E"/>
-                            --><!-- Pressed color --><!--
-                        </Trigger>-->
-                        <DataTrigger Binding="{Binding Path=StreamingStatus}" Value="Streaming" >
-                            <Setter TargetName="ButtonBorder" Property="Background" Value="#304FFE"/>
+                        <DataTrigger Binding="{Binding Path=StreamingStatusString}" Value="Streaming" >
+                            <Setter TargetName="ButtonBorder" Property="Background" Value="{StaticResource buttonActiveColor}"/>
                         </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -199,22 +196,22 @@
         <Setter Property="Content">
             <Setter.Value>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <fa:IconImage Icon="Play" Width="20" Height="20" Foreground="{StaticResource titleColor2}" Margin="10,0,0,0"/>
+                    <fa:IconImage Icon="Play" Width="20" Height="20" Foreground="{StaticResource titleButtonColor}" Margin="10,0,0,0"/>
                     <TextBlock HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           FontSize="12"
-                           FontWeight="Bold"
-                           FontFamily="Montserrat"
-                           Foreground="{StaticResource titleColor2}"
-                           TextAlignment="Center"
-                           Padding="10"
-                           Text="Start"/>
+                               VerticalAlignment="Center"
+                               FontSize="12"
+                               FontWeight="Bold"
+                               FontFamily="Montserrat"
+                               Foreground="{StaticResource titleButtonColor}"
+                               TextAlignment="Center"
+                               Padding="10"
+                               Text="Start"/>
                 </StackPanel>
             </Setter.Value>
         </Setter>
     </Style>
-
-
+    
+    <!--Style for Stop button-->
     <Style x:Key="StopButtonStyle" TargetType="Button">
         <!-- Set default properties -->
         <Setter Property="Width" Value="150"/>
@@ -223,7 +220,7 @@
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Margin" Value="30,0,0,0"/>
         <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="Background" Value="#200F53"/>
+        <Setter Property="Background" Value="{StaticResource buttonColor}"/>
 
         <Setter Property="Template">
             <Setter.Value>
@@ -233,14 +230,10 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="ButtonBorder" Property="Background" Value="#FF5722"/>
+                            <Setter TargetName="ButtonBorder" Property="Background" Value="{StaticResource buttonHoverColor}"/>
                         </Trigger>
-
-                        <!--<Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="ButtonBorder" Property="Background" Value="#1A237E"/>
-                        </Trigger>-->
-                        <DataTrigger Binding="{Binding Path=StreamingStatus}" Value="Stopped" >
-                            <Setter TargetName="ButtonBorder" Property="Background" Value="#FF5722"/>
+                        <DataTrigger Binding="{Binding Path=StreamingStatusString}" Value="Stopped" >
+                            <Setter TargetName="ButtonBorder" Property="Background" Value="{StaticResource buttonActiveColor}"/>
                         </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -250,20 +243,476 @@
         <Setter Property="Content">
             <Setter.Value>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <fa:IconImage Icon="Pause" Width="20" Height="20" Foreground="{StaticResource titleColor2}" Margin="10,0,0,0"/>
+                    <fa:IconImage Icon="Pause" Width="20" Height="20" Foreground="{StaticResource titleButtonColor}" Margin="10,0,0,0"/>
+                    <TextBlock HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontSize="12"
+                               FontWeight="Bold"
+                               FontFamily="Montserrat"
+                               Foreground="{StaticResource titleButtonColor}"
+                               TextAlignment="Center"
+                               Padding="10"
+                               Text="Stop"/>
+                </StackPanel>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--Style for Refresh button-->
+    <Style x:Key="RefreshButtonStyle" TargetType="Button">
+        <!-- Set default properties -->
+        <Setter Property="Width" Value="150"/>
+        <Setter Property="Height" Value="35"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="30,0,0,0"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Background" Value="{StaticResource buttonColor}"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="ButtonBorder" CornerRadius="5" Background="{TemplateBinding Background}" Width="150">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <!-- Biểu tượng với RotateTransform -->
+                            <fa:IconImage x:Name="Icon"
+                                      Icon="Refresh"
+                                      Width="20" Height="20"
+                                      Foreground="{StaticResource titleButtonColor}" 
+                                      Margin="10,0,0,0">
+                                <fa:IconImage.RenderTransform>
+                                    <RotateTransform x:Name="IconRotate" CenterX="10" CenterY="10" />
+                                </fa:IconImage.RenderTransform>
+                            </fa:IconImage>
+                            <TextBlock HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   FontSize="12"
+                                   FontWeight="Bold"
+                                   FontFamily="Montserrat"
+                                   Foreground="{StaticResource titleButtonColor}"
+                                   TextAlignment="Center"
+                                   Padding="10"
+                                   Text="Refresh"/>
+                        </StackPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <!--Trigger is pressed-->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="ButtonBorder" Property="Background" Value="{StaticResource buttonHoverColor}"/>
+                        </Trigger>
+                        
+                        <Trigger Property="IsPressed" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="IconRotate"
+                                                         Storyboard.TargetProperty="Angle"
+                                                         From="0" To="360"
+                                                         Duration="0:0:0.5"
+                                                         RepeatBehavior="1x"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+   
+    
+    
+    
+
+    <!--Style for Filter button-->
+    <Style x:Key="FilterButtonStyle" TargetType="Button">
+        <!-- Set default properties -->
+        <Setter Property="Width" Value="150"/>
+        <Setter Property="Height" Value="35"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="30,0,0,0"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Background" Value="{StaticResource buttonColor}"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="ButtonBorder" CornerRadius="5" Background="{TemplateBinding Background}" Width="150">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="ButtonBorder" Property="Background" Value="{StaticResource buttonHoverColor}"/>
+                        </Trigger>
+                        <DataTrigger Binding="{Binding Path=IsFiltered}" Value="True">
+                            <Setter TargetName="ButtonBorder" Property="Background" Value="{StaticResource buttonActiveColor}"/>
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="Content">
+            <Setter.Value>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <fa:IconImage Icon="{Binding Path=FilterIconName}" Width="20" Height="20" Foreground="{StaticResource titleButtonColor}" Margin="10,0,0,0"/>
+                    <TextBlock HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontSize="12"
+                           FontWeight="Bold"
+                           FontFamily="Montserrat"
+                           Foreground="{StaticResource titleButtonColor}"
+                           TextAlignment="Center"
+                           Padding="10"
+                           Text="Filter"/>
+                </StackPanel>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--Style for Export button-->
+    <Style x:Key="ExportButtonStyle" TargetType="Button">
+        <!-- Set default properties -->
+        <Setter Property="Width" Value="150"/>
+        <Setter Property="Height" Value="35"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="30,0,0,0"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Background" Value="{StaticResource buttonColor}"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="ButtonBorder" CornerRadius="5" Background="{TemplateBinding Background}" Width="150">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="ButtonBorder" Property="Background" Value="{StaticResource buttonHoverColor}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="Content">
+            <Setter.Value>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <fa:IconImage Icon="FileExport" Width="20" Height="20" Foreground="{StaticResource titleButtonColor}" Margin="10,0,0,0"/>
+                    <TextBlock HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontSize="12"
+                           FontWeight="Bold"
+                           FontFamily="Montserrat"
+                           Foreground="{StaticResource titleButtonColor}"
+                           TextAlignment="Center"
+                           Padding="10"
+                           Text="Export"/>
+                </StackPanel>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--Style for SendEmail button-->
+    <Style x:Key="SendEmailButtonStyle" TargetType="Button">
+        <!-- Set default properties -->
+        <Setter Property="Width" Value="150"/>
+        <Setter Property="Height" Value="35"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="30,0,0,0"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Background" Value="{StaticResource buttonColor}"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="ButtonBorder" CornerRadius="5" Background="{TemplateBinding Background}" Width="150">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="ButtonBorder" Property="Background" Value="{StaticResource buttonHoverColor}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="Content">
+            <Setter.Value>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <fa:IconImage Icon="ShareFromSquare" Width="20" Height="20" Foreground="{StaticResource titleButtonColor}" Margin="10,0,0,0"/>
                     <TextBlock HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        FontSize="12"
                        FontWeight="Bold"
                        FontFamily="Montserrat"
-                       Foreground="{StaticResource titleColor2}"
+                       Foreground="{StaticResource titleButtonColor}"
                        TextAlignment="Center"
                        Padding="10"
-                       Text="Stop"/>
+                       Text="Send to Mail"/>
                 </StackPanel>
             </Setter.Value>
         </Setter>
     </Style>
+
+    <!--Style for Reset Filter button-->
+    <Style x:Key="ResetFilterButtonStyle" TargetType="Button">
+        <!-- Set default properties -->
+        <Setter Property="Height" Value="35"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0,0,0,0"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Background" Value="{StaticResource buttonColor}"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="ButtonBorder" CornerRadius="5" Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="ButtonBorder" Property="Background" Value="{StaticResource buttonHoverColor}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="Content">
+            <Setter.Value>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <!--<fa:IconImage Icon="FilterCircleXmark" Width="20" Height="20" Foreground="{StaticResource titleButtonColor}" Margin="10,0,0,0"/>-->
+                    <TextBlock HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontSize="12"
+                       FontWeight="Bold"
+                       FontFamily="Montserrat"
+                       Foreground="{StaticResource titleButtonColor}"
+                       TextAlignment="Center"
+                       Padding="10"
+                       Text="Reset"/>
+                </StackPanel>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--Style for Apply Filter button-->
+    <Style x:Key="ApplyFilterButtonStyle" TargetType="Button">
+        <!-- Set default properties -->
+        <Setter Property="Height" Value="35"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0,0,0,0"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Background" Value="{StaticResource buttonColor}"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="ButtonBorder" CornerRadius="5" Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="ButtonBorder" Property="Background" Value="{StaticResource buttonHoverColor}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="Content">
+            <Setter.Value>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <!--<fa:IconImage Icon="FilterCircleDollar" Width="20" Height="20" Foreground="{StaticResource titleButtonColor}" Margin="10,0,0,0"/>-->
+                    <TextBlock HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   FontSize="12"
+                   FontWeight="Bold"
+                   FontFamily="Montserrat"
+                   Foreground="{StaticResource titleButtonColor}"
+                   TextAlignment="Center"
+                   Padding="10"
+                   Text="Apply"/>
+                </StackPanel>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <Style x:Key="CustomCalendarStyle" TargetType="{x:Type Calendar}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Calendar}">
+                    <Border Padding="10" CornerRadius="5" BorderThickness="1" BorderBrush="{StaticResource textBoxBorderColor}">
+                    <Grid>
+                        <!-- Header for Month and Navigation -->
+                        <Grid Background="#F5F5F5" Height="40">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Button x:Name="PART_PreviousButton" 
+                                Content="❮" 
+                                FontSize="16" 
+                                Width="40" 
+                                Height="40" 
+                                Background="Transparent" 
+                                BorderBrush="Transparent" 
+                                Foreground="#666" />
+
+                            <TextBlock x:Name="PART_HeaderButton"
+                                   Grid.Column="1"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   FontSize="14"
+                                   FontWeight="Bold"
+                                   Foreground="#333">
+                            <Run Text="{Binding DisplayDate, StringFormat=MMMM yyyy, RelativeSource={RelativeSource TemplatedParent}}" />
+                            </TextBlock>
+
+                            <Button x:Name="PART_NextButton" 
+                                Content="❯" 
+                                FontSize="16" 
+                                Width="40" 
+                                Height="40" 
+                                Grid.Column="2" 
+                                Background="Transparent" 
+                                BorderBrush="Transparent" 
+                                Foreground="#666" />
+                        </Grid>
+
+                        <!-- Calendar Days -->
+                        <Border Grid.Row="1" Background="White" Padding="10">
+                            <Grid x:Name="PART_Grid" />
+                        </Border>
+                    </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
+
+
+
+
+    <Style x:Key="CustomDatePickerStyle" TargetType="DatePicker">
+        <Setter Property="FontFamily" Value="Montserrat"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="BorderBrush" Value="#E0E0E0"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="DatePicker">
+                    <Grid>
+                        <!-- Border and Background -->
+                        <Border Background="{TemplateBinding Background}" 
+                                    BorderBrush="{TemplateBinding BorderBrush}" 
+                                    BorderThickness="{TemplateBinding BorderThickness}" 
+                                    CornerRadius="5">
+                            <Grid>
+                                <!-- TextBox to display selected date -->
+                                <TextBox x:Name="PART_TextBox"
+                                         Height="30" Width="120"        
+                                         HorizontalAlignment="Stretch"
+                                         VerticalAlignment="Center"
+                                         BorderThickness="0"
+                                         Background="Transparent"
+                                         VerticalContentAlignment="Center"
+                                         FontSize="{TemplateBinding FontSize}"
+                                         Padding="5"
+                                         IsReadOnly="True"
+                                         Text="{Binding SelectedDate, RelativeSource={RelativeSource TemplatedParent}, StringFormat={}{0:dd/MM/yyyy}}"/>
+
+                                <!-- Button to open Calendar -->
+                                <Button x:Name="PART_Button"
+                                            Margin="10,0,0,0"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Center"
+                                            Width="30"
+                                            Height="30"
+                                            Background="Transparent"
+                                            BorderBrush="Transparent"
+                                            ToolTip="Pick a date">
+                                    <Button.Content>
+                                        <Path Data="M13,1.5 L13,0.5 L11,0.5 L11,1.5 L4,1.5 L4,0.5 L2,0.5 L2,1.5 L0.5,1.5 L0.5,14.5 L13.5,14.5 L13.5,1.5 z M1.5,5.5 L5.5,5.5 L5.5,9.5 L1.5,9.5 z M6.5,5.5 L10.5,5.5 L10.5,9.5 L6.5,9.5 z M1.5,10.5 L5.5,10.5 L5.5,13.5 L1.5,13.5 z M6.5,10.5 L10.5,10.5 L10.5,13.5 L6.5,13.5 z"
+                                                  Fill="#666"
+                                                  Stretch="Uniform"
+                                                  Width="15"
+                                                  Height="15"/>
+                                    </Button.Content>
+                                </Button>
+
+                                <!-- Popup for Calendar -->
+                                <Popup x:Name="PART_Popup" 
+                                       PlacementTarget="{Binding ElementName=PART_Button}"
+                                       StaysOpen="False"
+                                       VerticalOffset="5"
+                                       HorizontalOffset="0"
+                                       AllowsTransparency="True"
+                                       IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}">
+                                    <Border Background="Transparent" 
+                                            BorderBrush="#E0E0E0" 
+                                            BorderThickness="1" 
+                                            CornerRadius="5"
+                                            Padding="10">
+                                        <Border.Effect>
+                                            <DropShadowEffect Color="Black" ShadowDepth="2" BlurRadius="10"/>
+                                        </Border.Effect>
+                                        <Calendar x:Name="PART_Calendar" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Style="{StaticResource CustomCalendarStyle}"/>
+                                    </Border>
+                                </Popup>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
+
+
 
 
 

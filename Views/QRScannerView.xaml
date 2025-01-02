@@ -33,14 +33,14 @@
                             Orientation="Horizontal"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Center">
-                    <fa:IconImage Icon="Clock" Width="20" Height="20" Foreground="{StaticResource titleColor2}" Margin="10,0,0,0"/>
+                    <fa:IconImage Icon="Clock" Width="20" Height="20" Foreground="{StaticResource titleButtonColor}" Margin="10,0,0,0"/>
                     <TextBlock x:Name="TextBlockClock"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                FontSize="12"
                                FontWeight="Bold"
                                FontFamily="Montserrat"
-                               Foreground="{StaticResource titleColor2}"
+                               Foreground="{StaticResource titleButtonColor}"
                                TextAlignment="Center"
                                Padding="10"
                                Text="10:00:00"/>
@@ -58,14 +58,14 @@
                 <StackPanel Orientation="Horizontal"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Center">
-                    <fa:IconImage Icon="Calendar" Width="20" Height="20" Foreground="{StaticResource titleColor2}" Margin="10,0,0,0"/>
+                    <fa:IconImage Icon="Calendar" Width="20" Height="20" Foreground="{StaticResource titleButtonColor}" Margin="10,0,0,0"/>
                     <TextBlock x:Name="TextBlockDate"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                FontSize="12"
                                FontWeight="Bold"
                                FontFamily="Montserrat"
-                               Foreground="{StaticResource titleColor2}"
+                               Foreground="{StaticResource titleButtonColor}"
                                TextAlignment="Center"
                                Padding="10"
                                Text="24/12/2024"/>
@@ -87,7 +87,7 @@
                             VerticalAlignment="Center"
                             HorizontalAlignment="Center">
                     <Label Content="Select camera"
-                           Foreground ="{StaticResource titleColor2}"
+                           Foreground ="{StaticResource titleButtonColor}"
                            FontSize="12"
                            FontFamily="Montserrat"
                            FontWeight="Bold"
@@ -192,13 +192,13 @@
                                Grid.Row="0"
                                FontFamily="Montserrat"
                                FontStyle="Italic"
-                               Foreground="{StaticResource titleColor3}"
+                               Foreground="{StaticResource titleBackgroundColor1}"
                                HorizontalAlignment="Center"/>
                     
                     <TextBlock x:Name="TextBlobkScanning"
                                Grid.Row="2" 
                                Text="QR Scanner"
-                               Foreground="{StaticResource titleColor2}"
+                               Foreground="{StaticResource titleButtonColor}"
                                VerticalAlignment="Center"
                                HorizontalAlignment="Center"
                                FontSize="30"
@@ -222,7 +222,7 @@
                                        FontFamily="Montserrat"
                                        FontStyle="Normal"
                                        FontWeight="Medium"
-                                       Foreground="{StaticResource titleColor2}"
+                                       Foreground="{StaticResource titleButtonColor}"
                                        HorizontalAlignment="Left"/>
                             
                             <TextBlock Text="{Binding QRCodeContent}"
@@ -230,7 +230,7 @@
                                        FontSize="12"
                                        FontFamily="Montserrat"
                                        FontStyle="Italic"
-                                       Foreground="{StaticResource titleColor3}"
+                                       Foreground="{StaticResource titleBackgroundColor1}"
                                        HorizontalAlignment="Left"/>
 
                             <TextBlock Text="{Binding StreamingStatus}"
@@ -238,7 +238,7 @@
                                        FontSize="12"
                                        FontFamily="Montserrat"
                                        FontStyle="Italic"
-                                       Foreground="{StaticResource titleColor3}"
+                                       Foreground="{StaticResource titleBackgroundColor1}"
                                        HorizontalAlignment="Left"/>
                         </StackPanel>
                     </StackPanel>

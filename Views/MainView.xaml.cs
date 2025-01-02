@@ -94,5 +94,10 @@ namespace WpfApp4
         {
             TextBlockClock.Text = DateAndTime.TimeString;
         }
+
+        private void MainView_Loaded(object sender, RoutedEventArgs e)
+        {
+            
+        }
     }
 }

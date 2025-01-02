@@ -8,6 +8,7 @@ namespace WpfApp4.Models
 {
     public class QRCodeModel
     {
+        public int RowNumber { get; set; }
         public string? QRCodeValue { get; set; }
         public DateTime ScanDate { get; set; }  
         public TimeSpan ScanTime { get; set; }
